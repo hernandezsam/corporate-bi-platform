@@ -1,0 +1,30 @@
+# Render.com Infrastructure as Code Blueprint
+# Documentación: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: corporate-bi-platform
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: NEXT_PUBLIC_COMPANY_NAME
+        value: "Corporación Meridian"
+      - key: NEXT_PUBLIC_COMPANY_TAGLINE
+        value: "Ingeniería, Gestión y Analítica Estratégica"
