@@ -1,20 +1,15 @@
 import { z } from "zod";
+import { isAllowedPowerBiUrl } from "@/lib/security";
 
 export const safeHttpsUrlSchema = z
   .string()
   .trim()
+  .max(2048, "La URL excede el largo máximo permitido.")
   .url("Ingrese una URL válida.")
-  .refine(
-    (val) => {
-      try {
-        const parsed = new URL(val);
-        return parsed.protocol === "https:";
-      } catch {
-        return false;
-      }
-    },
-    { message: "La URL del informe debe utilizar protocolo seguro HTTPS." }
-  );
+  .refine((val) => isAllowedPowerBiUrl(val), {
+    message:
+      "Solo se permiten enlaces seguros HTTPS de Power BI (*.powerbi.com / *.fabric.microsoft.com).",
+  });
 
 export const loginSchema = z.object({
   email: z.string().trim().email("Ingrese un correo electrónico válido."),
@@ -29,7 +24,8 @@ export const updatePasswordSchema = z
   .object({
     password: z
       .string()
-      .min(8, "La nueva contraseña debe tener al menos 8 caracteres."),
+      .min(8, "La nueva contraseña debe tener al menos 8 caracteres.")
+      .max(72, "La contraseña es demasiado larga."),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -58,7 +54,11 @@ export const createUserSchema = z.object({
     .max(72, "La contraseña es demasiado larga."),
   role: z.enum(["ADMIN", "USER"]),
   active: z.boolean().default(true),
-  report_ids: z.array(z.string().uuid()).optional().default([]),
+  report_ids: z
+    .array(z.string().uuid())
+    .max(200, "Máximo 200 informes por operación.")
+    .optional()
+    .default([]),
 });
 
 export const updateUserSchema = z.object({
@@ -98,12 +98,19 @@ export const reportSchema = z.object({
     .max(140, "El nombre es demasiado largo."),
   description: z.string().trim().max(500).optional().default(""),
   powerbi_url: safeHttpsUrlSchema,
-  category_id: z.string().uuid("Seleccione una categoría válida.").nullable().optional(),
+  category_id: z
+    .string()
+    .uuid("Seleccione una categoría válida.")
+    .nullable()
+    .optional(),
   category: z.string().trim().max(80).optional(),
   icon: z.string().trim().min(1).max(40).default("BarChart3"),
   active: z.boolean().default(true),
   sort_order: z.coerce.number().int().min(0).max(9999).default(0),
-  embed_mode: z.enum(["direct_url", "powerbi_embedded"]).optional().default("direct_url"),
+  embed_mode: z
+    .enum(["direct_url", "powerbi_embedded"])
+    .optional()
+    .default("direct_url"),
   powerbi_workspace_id: z.string().trim().max(120).nullable().optional(),
   powerbi_report_id: z.string().trim().max(120).nullable().optional(),
 });
@@ -116,7 +123,9 @@ export const assignmentToggleSchema = z.object({
 
 export const bulkUserAssignmentsSchema = z.object({
   user_id: z.string().uuid("Usuario inválido."),
-  report_ids: z.array(z.string().uuid()),
+  report_ids: z
+    .array(z.string().uuid())
+    .max(200, "Máximo 200 informes por operación."),
 });
 
 export const contactFormSchema = z.object({
@@ -134,4 +143,6 @@ export const contactFormSchema = z.object({
     .trim()
     .min(10, "El mensaje debe tener al menos 10 caracteres.")
     .max(2000),
+  // Campo honeypot anti-spam (debe permanecer vacío)
+  website: z.string().max(0).optional().default(""),
 });

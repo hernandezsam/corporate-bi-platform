@@ -2,10 +2,47 @@ import { NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validators";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import {
+  checkRateLimit,
+  getClientIp,
+  isSameOriginRequest,
+} from "@/lib/security";
 
 export async function POST(request: Request) {
   try {
+    if (!isSameOriginRequest(request)) {
+      return NextResponse.json(
+        { error: "Origen de solicitud no autorizado." },
+        { status: 403 }
+      );
+    }
+
+    // Rate limit por IP: máximo 5 envíos cada 10 minutos
+    const ip = getClientIp(request);
+    const rate = checkRateLimit(`contact:${ip}`, {
+      limit: 5,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rate.allowed) {
+      return NextResponse.json(
+        {
+          error:
+            "Ha superado el límite de envíos recientes. Intente nuevamente en unos minutos.",
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rate.retryAfterSec) },
+        }
+      );
+    }
+
     const body = await request.json();
+
+    // Honeypot anti-bot: si un bot llena el campo oculto "website", responder éxito silencioso sin guardar
+    if (typeof body?.website === "string" && body.website.trim().length > 0) {
+      return NextResponse.json({ ok: true }, { status: 201 });
+    }
+
     const parsed = contactFormSchema.safeParse(body);
 
     if (!parsed.success) {

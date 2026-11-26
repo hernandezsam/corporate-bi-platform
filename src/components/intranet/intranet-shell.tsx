@@ -23,9 +23,14 @@ import { getIconByName } from "@/lib/icons";
 import { cn, getInitials } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
+export type SidebarReportItem = Pick<
+  Report,
+  "id" | "name" | "icon" | "category" | "sort_order"
+>;
+
 interface IntranetShellProps {
   profile: Profile;
-  reports: Report[];
+  reports: SidebarReportItem[];
   children: React.ReactNode;
 }
 

@@ -5,6 +5,7 @@ import {
   assignmentToggleSchema,
   bulkUserAssignmentsSchema,
 } from "@/lib/validators";
+import { logAdminAction } from "@/lib/audit";
 
 export async function GET(request: Request) {
   const auth = await verifyAdminApiRequest();
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -80,6 +81,15 @@ export async function POST(request: Request) {
       }
     }
 
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: assigned ? "assignment.grant" : "assignment.revoke",
+      targetType: "assignment",
+      targetId: `${user_id}:${report_id}`,
+      metadata: { user_id, report_id, assigned },
+    });
+
     return NextResponse.json({ ok: true, user_id, report_id, assigned });
   } catch {
     return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
@@ -87,7 +97,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -133,6 +143,15 @@ export async function PUT(request: Request) {
         );
       }
     }
+
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: "assignment.bulk_replace",
+      targetType: "assignment",
+      targetId: user_id,
+      metadata: { user_id, reports_count: report_ids.length },
+    });
 
     return NextResponse.json({ ok: true, user_id, report_ids });
   } catch {

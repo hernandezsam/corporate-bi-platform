@@ -16,6 +16,7 @@ export function ContactForm() {
     phone: "",
     subject: "",
     message: "",
+    website: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +47,7 @@ export function ContactForm() {
           phone: "",
           subject: "",
           message: "",
+          website: "",
         });
       }
     } catch {
@@ -57,6 +59,17 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Campo honeypot anti-spam oculto para usuarios reales */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+        value={form.website}
+        onChange={(e) => setForm({ ...form, website: e.target.value })}
+      />
       {error && <Alert variant="destructive">{error}</Alert>}
       {success && (
         <Alert variant="success">

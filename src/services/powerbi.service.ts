@@ -1,17 +1,15 @@
 import type { Report, ReportEmbedMode } from "@/types/database";
+import { isAllowedPowerBiUrl } from "@/lib/security";
 
 /**
  * Contrato extensible para la visualización de informes Power BI.
  *
  * V1 (Actual):
  * - Modo `direct_url`: utiliza la URL configurada por el administrador en Supabase.
- * - El acceso al iframe está protegido por autenticación + RLS en Supabase.
+ * - Validada contra HTTPS y dominios autorizados de Power BI / Microsoft Fabric.
  *
  * V2 (Futura integración — Power BI Embedded + Microsoft Entra ID):
- * - Implementar un proveedor que obtenga un Access Token desde Microsoft Entra ID
- *   (Client Credentials / Service Principal) y genere un Embed Token efímero vía
- *   Power BI REST API (`GenerateTokenInGroup`) usando `powerbi_workspace_id` y
- *   `powerbi_report_id` (campos ya creados en la tabla `reports`).
+ * - Generación server-side de Embed Token vía Power BI REST API.
  */
 export interface PowerBiEmbedConfig {
   mode: ReportEmbedMode;
@@ -35,23 +33,18 @@ export function isLikelyPublishToWebUrl(url: string): boolean {
 }
 
 export function isSafeIframeUrl(url: string): boolean {
-  try {
-    const parsed = new URL(url);
-    return parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
+  return isAllowedPowerBiUrl(url);
 }
 
 export async function resolvePowerBiEmbedConfig(
   report: Report
 ): Promise<PowerBiEmbedConfig> {
   if (!isSafeIframeUrl(report.powerbi_url)) {
-    throw new Error("La URL del informe no cumple con los requisitos de seguridad HTTPS.");
+    throw new Error(
+      "La URL del informe no pertenece a un dominio HTTPS autorizado de Power BI."
+    );
   }
 
-  // En V2, cuando report.embed_mode === 'powerbi_embedded', se invocará aquí
-  // el servicio de generación de Embed Token contra Microsoft Entra ID y Power BI API.
   return {
     mode: report.embed_mode || "direct_url",
     embedUrl: report.powerbi_url,

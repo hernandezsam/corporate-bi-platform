@@ -12,7 +12,7 @@ interface RouteContext {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -54,8 +54,8 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+export async function DELETE(request: Request, context: RouteContext) {
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }

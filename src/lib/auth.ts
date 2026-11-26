@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { isSameOriginRequest } from "@/lib/security";
 import type { Profile } from "@/types/database";
 
 export interface AuthSessionResult {
@@ -65,10 +66,24 @@ export async function requireAdminUser(): Promise<AuthSessionResult> {
  * Helper para Route Handlers (/api/admin/*).
  * Valida sesión, estado activo y rol ADMIN desde PostgreSQL sin depender del cliente.
  */
-export async function verifyAdminApiRequest(): Promise<
+export async function verifyAdminApiRequest(
+  request?: Request
+): Promise<
   | { ok: true; session: AuthSessionResult }
   | { ok: false; status: number; message: string }
 > {
+  if (
+    request &&
+    ["POST", "PUT", "PATCH", "DELETE"].includes(request.method.toUpperCase()) &&
+    !isSameOriginRequest(request)
+  ) {
+    return {
+      ok: false,
+      status: 403,
+      message: "Origen de solicitud no autorizado.",
+    };
+  }
+
   if (!isSupabaseConfigured()) {
     return {
       ok: false,

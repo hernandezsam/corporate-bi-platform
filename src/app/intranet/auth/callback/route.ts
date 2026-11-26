@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { sanitizeInternalPath } from "@/lib/security";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const rawNext = searchParams.get("next") ?? "/intranet/dashboard";
-  // Prevenir Open Redirect: solo rutas internas que comienzan con un único "/"
-  const next =
-    rawNext.startsWith("/") && !rawNext.startsWith("//")
-      ? rawNext
-      : "/intranet/dashboard";
+  const next = sanitizeInternalPath(
+    searchParams.get("next"),
+    "/intranet/dashboard"
+  );
 
   if (code && isSupabaseConfigured()) {
     const supabase = await createServerSupabaseClient();

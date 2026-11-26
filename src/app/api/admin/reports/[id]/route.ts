@@ -3,6 +3,7 @@ import { z } from "zod";
 import { verifyAdminApiRequest } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { reportSchema } from "@/lib/validators";
+import { logAdminAction } from "@/lib/audit";
 
 const uuidSchema = z.string().uuid();
 const partialReportSchema = reportSchema.partial();
@@ -41,7 +42,7 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -76,14 +77,23 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: "report.update",
+      targetType: "report",
+      targetId: id,
+      metadata: { updated_fields: Object.keys(parsed.data) },
+    });
+
     return NextResponse.json({ report: data });
   } catch {
     return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
   }
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+export async function DELETE(request: Request, context: RouteContext) {
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -102,6 +112,14 @@ export async function DELETE(_request: Request, context: RouteContext) {
       { status: 500 }
     );
   }
+
+  await logAdminAction({
+    actorId: auth.session.userId,
+    actorEmail: auth.session.profile.email,
+    action: "report.delete",
+    targetType: "report",
+    targetId: id,
+  });
 
   return NextResponse.json({ ok: true });
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { verifyAdminApiRequest } from "@/lib/auth";
 import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { createUserSchema } from "@/lib/validators";
+import { logAdminAction } from "@/lib/audit";
 
 export async function GET() {
   const auth = await verifyAdminApiRequest();
@@ -49,7 +50,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -122,6 +123,15 @@ export async function POST(request: Request) {
         .from("user_reports")
         .upsert(rows, { onConflict: "user_id,report_id" });
     }
+
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: "user.create",
+      targetType: "user",
+      targetId: userId,
+      metadata: { email, role, active, reports_count: report_ids.length },
+    });
 
     return NextResponse.json(
       {

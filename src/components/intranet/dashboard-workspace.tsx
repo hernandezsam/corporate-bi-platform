@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { Profile, Report } from "@/types/database";
 import { getIconByName } from "@/lib/icons";
+import { isAllowedPowerBiUrl } from "@/lib/security";
 import { cn, formatDate } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -163,13 +164,19 @@ export function DashboardWorkspace({
             </div>
           </div>
           <div className="relative h-[82vh] min-h-[600px] w-full bg-slate-100">
-            <iframe
-              title={quickPreviewReport.name}
-              src={quickPreviewReport.powerbi_url}
-              className="h-full w-full border-0"
-              allowFullScreen
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
+            {isAllowedPowerBiUrl(quickPreviewReport.powerbi_url) ? (
+              <iframe
+                title={quickPreviewReport.name}
+                src={quickPreviewReport.powerbi_url}
+                className="h-full w-full border-0"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center p-6 text-sm text-slate-600">
+                La URL de este informe no pertenece a un dominio Power BI autorizado.
+              </div>
+            )}
           </div>
         </Card>
       )}

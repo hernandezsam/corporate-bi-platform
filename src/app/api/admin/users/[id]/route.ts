@@ -3,6 +3,7 @@ import { z } from "zod";
 import { verifyAdminApiRequest } from "@/lib/auth";
 import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { updateUserSchema } from "@/lib/validators";
+import { logAdminAction } from "@/lib/audit";
 
 const uuidSchema = z.string().uuid();
 
@@ -40,7 +41,7 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -129,6 +130,19 @@ export async function PATCH(request: Request, context: RouteContext) {
       .eq("id", id)
       .single();
 
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: "user.update",
+      targetType: "user",
+      targetId: id,
+      metadata: {
+        role,
+        active,
+        password_changed: Boolean(password && password.length >= 8),
+      },
+    });
+
     return NextResponse.json({ user: updated });
   } catch (err) {
     const message =
@@ -137,8 +151,8 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
-  const auth = await verifyAdminApiRequest();
+export async function DELETE(request: Request, context: RouteContext) {
+  const auth = await verifyAdminApiRequest(request);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status });
   }
@@ -165,6 +179,14 @@ export async function DELETE(_request: Request, context: RouteContext) {
         { status: 500 }
       );
     }
+
+    await logAdminAction({
+      actorId: auth.session.userId,
+      actorEmail: auth.session.profile.email,
+      action: "user.delete",
+      targetType: "user",
+      targetId: id,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (err) {

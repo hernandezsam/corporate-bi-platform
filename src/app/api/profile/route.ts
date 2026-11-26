@@ -2,8 +2,16 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedProfile } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { updateOwnProfileSchema } from "@/lib/validators";
+import { isSameOriginRequest } from "@/lib/security";
 
 export async function PATCH(request: Request) {
+  if (!isSameOriginRequest(request)) {
+    return NextResponse.json(
+      { error: "Origen de solicitud no autorizado." },
+      { status: 403 }
+    );
+  }
+
   const session = await getAuthenticatedProfile();
   if (!session) {
     return NextResponse.json({ error: "No autenticado." }, { status: 401 });
@@ -20,7 +28,6 @@ export async function PATCH(request: Request) {
     }
 
     const supabase = await createServerSupabaseClient();
-    // Solo se actualiza full_name; rol y active están bloqueados por RLS y trigger SQL.
     const { error } = await supabase
       .from("profiles")
       .update({ full_name: parsed.data.full_name })
