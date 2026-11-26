@@ -1,68 +1,107 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Check, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { ContactForm } from "@/components/public/contact-form";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: `Póngase en contacto con ${siteConfig.companyName}.`,
+  description:
+    "Solicite una demostración sin costo del módulo de estados financieros con los datos de su empresa.",
 };
 
 export default function ContactoPage() {
   return (
     <div className="flex flex-col">
-      <section className="border-b border-slate-200/80 bg-slate-50/70 bg-subtle-grid py-16 lg:py-20">
+      <section className="bg-[#0D1B2A] bg-dark-grid py-16 text-white lg:py-20">
         <div className="container max-w-4xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-            Contacto Corporativo
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0F9D8A]">
+            {siteConfig.nextStep.eyebrow}
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-            Conversemos sobre su próximo proyecto
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            {siteConfig.nextStep.title}
           </h1>
-          <p className="text-base leading-relaxed text-slate-600">
-            Complete el formulario o utilice nuestros canales directos. Un especialista
-            de nuestro equipo revisará su consulta.
+          <p className="text-base leading-relaxed text-slate-300">
+            {siteConfig.nextStep.subtitle}
           </p>
         </div>
       </section>
 
       <section className="py-16">
         <div className="container grid gap-8 lg:grid-cols-12">
-          <div className="space-y-4 lg:col-span-5">
-            <Card>
+          <div className="space-y-5 lg:col-span-5">
+            <Card className="border-[#0D1B2A]/10 bg-[#0D1B2A] text-white">
               <CardHeader>
-                <CardTitle>Información de Contacto</CardTitle>
-                <CardDescription>
-                  Oficina central y canales corporativos (datos editables en configuración).
+                <CardTitle className="text-white">
+                  ¿Qué incluye la demo sin costo?
+                </CardTitle>
+                <CardDescription className="text-slate-300">
+                  Revise el valor real de Findex antes de tomar una decisión.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-5 text-sm">
-                <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 text-blue-600 shrink-0" />
-                  <div>
-                    <p className="font-medium text-slate-900">Dirección</p>
-                    <p className="text-slate-600">{siteConfig.contact.address}</p>
-                  </div>
+              <CardContent className="space-y-3 text-sm text-slate-200">
+                <div className="flex items-start gap-2.5">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                  <span>
+                    Módulo de estados financieros armado con cifras reales de su
+                    empresa.
+                  </span>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="mt-0.5 h-4 w-4 text-blue-600 shrink-0" />
-                  <div>
-                    <p className="font-medium text-slate-900">Teléfono</p>
-                    <p className="text-slate-600">{siteConfig.contact.phone}</p>
-                  </div>
+                <div className="flex items-start gap-2.5">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                  <span>
+                    Recorrido por los 5 módulos e informe mensual generado con
+                    IA.
+                  </span>
                 </div>
+                <div className="flex items-start gap-2.5">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                  <span>
+                    Plan de implementación en 5 semanas adaptado a su Softland.
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Canales directos</CardTitle>
+                <CardDescription>
+                  {siteConfig.contact.contactRole}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <Mail className="mt-0.5 h-4 w-4 text-blue-600 shrink-0" />
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
                   <div>
-                    <p className="font-medium text-slate-900">Correo electrónico</p>
+                    <p className="font-medium text-[#0D1B2A]">Correo</p>
                     <p className="text-slate-600">{siteConfig.contact.email}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock className="mt-0.5 h-4 w-4 text-blue-600 shrink-0" />
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
                   <div>
-                    <p className="font-medium text-slate-900">Horario de atención</p>
+                    <p className="font-medium text-[#0D1B2A]">Teléfono</p>
+                    <p className="text-slate-600">{siteConfig.contact.phone}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                  <div>
+                    <p className="font-medium text-[#0D1B2A]">Ubicación</p>
+                    <p className="text-slate-600">{siteConfig.contact.address}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                  <div>
+                    <p className="font-medium text-[#0D1B2A]">Atención</p>
                     <p className="text-slate-600">{siteConfig.contact.hours}</p>
                   </div>
                 </div>
@@ -73,9 +112,10 @@ export default function ContactoPage() {
           <div className="lg:col-span-7">
             <Card>
               <CardHeader>
-                <CardTitle>Envíenos un mensaje</CardTitle>
+                <CardTitle>Solicitar demostración o consulta</CardTitle>
                 <CardDescription>
-                  Los campos marcados con * son obligatorios.
+                  Cuéntenos sobre su empresa y coordinemos una revisión con sus
+                  cifras.
                 </CardDescription>
               </CardHeader>
               <CardContent>

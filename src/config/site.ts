@@ -1,221 +1,513 @@
 /**
- * Configuración centralizada de identidad corporativa (Placeholders editables).
- * Modifique este archivo o configure las variables NEXT_PUBLIC_COMPANY_* para
- * personalizar el nombre, textos, servicios, proyectos y datos de contacto.
+ * Configuración oficial de identidad y propuesta comercial de Findex.
+ * Fuente: Presentación corporativa Findex ("Claridad financiera, cada semana").
  */
 
-export interface CorporateServiceItem {
+export interface FindexModuleItem {
+  number: string;
   id: string;
   title: string;
   summary: string;
-  description: string;
+  details: string;
   icon: string;
   highlights: string[];
 }
 
-export interface CorporateProjectItem {
-  id: string;
+export interface FindexProblemItem {
   title: string;
-  client: string;
-  sector: string;
-  year: string;
-  metric: string;
-  summary: string;
-  tags: string[];
+  description: string;
+  icon: "clock" | "spreadsheet" | "user-x";
+  alert?: boolean;
 }
 
-export interface CorporateStatItem {
-  label: string;
-  value: string;
-  detail: string;
+export interface FindexValuePropItem {
+  title: string;
+  subtitle: string;
+  icon: string;
+}
+
+export interface FindexFlowStep {
+  title: string;
+  subtitle: string;
+  icon: string;
+  featured?: boolean;
+}
+
+export interface FindexTimelineStep {
+  phase: string;
+  week: string;
+  description: string;
+}
+
+export interface FindexSecurityItem {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface FindexComparisonRow {
+  criterion: string;
+  excel: string;
+  analyst: string;
+  consulting: string;
+  findex: string;
+}
+
+export interface FindexTeamRole {
+  title: string;
+  description: string;
+  icon: string;
 }
 
 export const siteConfig = {
-  companyName: process.env.NEXT_PUBLIC_COMPANY_NAME || "Corporación Meridian",
-  shortName: "Meridian",
+  companyName: process.env.NEXT_PUBLIC_COMPANY_NAME || "Findex",
+  shortName: "Findex",
   tagline:
     process.env.NEXT_PUBLIC_COMPANY_TAGLINE ||
-    "Ingeniería, Gestión y Analítica Estratégica",
-  legalName: "Corporación Meridian S.A.",
+    "Claridad financiera, cada semana",
+  legalName: "Findex",
   description:
-    "Soluciones integrales de ingeniería, gestión de proyectos e inteligencia de negocios diseñadas para potenciar la toma de decisiones ejecutivas.",
+    "Paneles de gestión y análisis con IA para medianas empresas que usan Softland. En marcha en 5 semanas, sin cambiar de sistema.",
+
+  // Lámina 1 — Portada / Hero
   hero: {
-    badge: "Excelencia Operacional & Gobierno de Datos",
-    title: "Impulsamos decisiones estratégicas con ingeniería y precisión analítica",
+    eyebrow: "CONTROL DE GESTIÓN CON INTELIGENCIA ARTIFICIAL",
+    title: "Claridad financiera, cada semana",
     subtitle:
-      "Acompañamos a organizaciones líderes en la planificación, ejecución y control de proyectos complejos, integrando tecnología, trazabilidad financiera y control de gestión en tiempo real.",
-    primaryCta: "Solicitar reunión",
-    secondaryCta: "Conocer servicios",
+      "Paneles de gestión y análisis con IA para medianas empresas que usan Softland. En marcha en 5 semanas, sin cambiar de sistema.",
+    primaryCta: "Solicitar demo sin costo",
+    secondaryCta: "Ver los 5 módulos",
   },
-  about: {
-    title: "Más de una década transformando operación en resultados medibles",
-    lead: "Somos una firma multidisciplinaria comprometida con el rigor técnico, la transparencia financiera y la innovación aplicada a proyectos de alto impacto.",
-    story:
-      "Desde nuestra fundación, hemos desarrollado metodologías propias de gestión integral que conectan la operación en terreno con los indicadores estratégicos de la dirección ejecutiva. Nuestro equipo combina experiencia en ingeniería, finanzas corporativas y analítica avanzada.",
-    mission:
-      "Entregar soluciones de ingeniería, gestión y analítica de clase mundial que generen valor sostenible, eficiencia operacional y claridad estratégica para nuestros clientes y aliados.",
-    vision:
-      "Consolidarnos como el socio estratégico referente en la región por nuestra rigurosidad técnica, transparencia en la gestión y adopción de plataformas digitales de vanguardia.",
-    values: [
+
+  // Lámina 2 — El Problema
+  problem: {
+    eyebrow: "EL PROBLEMA",
+    title: "La gerencia se entera del margen cuando ya es tarde",
+    items: [
       {
-        title: "Rigor Técnico",
+        title: "Números al cierre de mes",
         description:
-          "Cada recomendación y entregable se sustenta en metodologías probadas y datos verificables.",
+          "El resultado de cada proyecto se conoce semanas después, cuando ya no se puede corregir.",
+        icon: "clock",
       },
       {
-        title: "Transparencia",
+        title: "Horas en planillas",
         description:
-          "Trazabilidad total en indicadores financieros, avances de proyectos y cumplimiento de compromisos.",
+          "Finanzas arma informes en Excel a mano, cada mes, y nadie confía del todo en ellos.",
+        icon: "spreadsheet",
       },
       {
-        title: "Seguridad y Confidencialidad",
+        title: "Sin quien los analice",
         description:
-          "Protegemos la información corporativa bajo los más altos estándares de gobierno y acceso controlado.",
+          "No hay área de control de gestión, y contratar y retener un analista es caro y difícil.",
+        icon: "user-x",
+        alert: true,
+      },
+    ] as FindexProblemItem[],
+    statHighlight: "44 %",
+    statText:
+      "de las medianas empresas chilenas menciona falta de talento especializado para usar IA (SAP, 2025).",
+  },
+
+  // Lámina 3 — Qué Hacemos
+  whatWeDo: {
+    eyebrow: "QUÉ HACEMOS",
+    title: "Arrendamos control de gestión con IA, sobre su Softland",
+    pillars: [
+      {
+        title: "Margen por proyecto cada semana",
+        subtitle: "sin contratar un analista",
+        icon: "TrendingUp",
       },
       {
-        title: "Mejora Continua",
+        title: "IA que explica las cifras",
+        subtitle: "y propone acciones a gerentes no financieros",
+        icon: "Cpu",
+      },
+      {
+        title: "Sobre su Softland",
+        subtitle: "sin cambiar de ERP ni de procesos",
+        icon: "Database",
+      },
+      {
+        title: "En marcha en 5 semanas",
+        subtitle: "y sin licencias Power BI para sus usuarios",
+        icon: "Activity",
+      },
+      {
+        title: "Arriendo mensual, datos en Chile",
+        subtitle: "usted es dueño de sus datos; nosotros los cuidamos",
+        icon: "ShieldCheck",
+      },
+    ] as FindexValuePropItem[],
+    whatYouReceiveTitle: "Lo que recibe",
+    whatYouReceive: [
+      "5 módulos de control de gestión",
+      "Intranet con su marca y sus usuarios",
+      "Informe mensual con IA",
+      "Actualización automática diaria",
+      "Soporte y mejoras continuas",
+    ],
+  },
+
+  // Lámina 4 — Cómo Funciona
+  howItWorks: {
+    eyebrow: "CÓMO FUNCIONA",
+    title: "Sus datos de Softland, convertidos en decisiones",
+    steps: [
+      {
+        title: "Su Softland",
+        subtitle: "contabilidad, inventario, remuneraciones",
+        icon: "Database",
+      },
+      {
+        title: "Conector seguro",
+        subtitle: "solo lectura, en su empresa",
+        icon: "Layers",
+      },
+      {
+        title: "Plataforma Findex",
+        subtitle: "Microsoft Azure, en Chile",
+        icon: "Globe",
+        featured: true,
+      },
+      {
+        title: "Intranet Findex",
+        subtitle: "con su marca y sus usuarios",
+        icon: "BarChart3",
+      },
+      {
+        title: "Su gerencia",
+        subtitle: "decide con datos al día",
+        icon: "UserCheck",
+      },
+    ] as FindexFlowStep[],
+    aiBranchTitle: "Inteligencia artificial",
+    aiBranchText:
+      "analiza cifras agregadas y redacta el informe mensual",
+    footnote:
+      "No reemplazamos su ERP ni su contabilidad: trabajamos sobre lo que ya registra.",
+  },
+
+  // Lámina 5 — 5 Módulos
+  modules: {
+    eyebrow: "MÓDULOS",
+    title: "Cinco módulos probados en operación real",
+    footnote: "Cada panel lleva los colores y el logo de su empresa.",
+    items: [
+      {
+        number: "01",
+        id: "estados-financieros",
+        title: "Estados financieros",
+        summary:
+          "Resultado y balance por empresa y centro de costo, hasta la cuenta.",
+        details:
+          "Estado de resultados y balance general estructurados según su plan de cuentas en Softland, con apertura por empresa, unidad de negocio y centro de costo hasta el nivel de cuenta contable.",
+        icon: "Landmark",
+        highlights: [
+          "Estado de resultados y balance general",
+          "Apertura por empresa y centro de costo",
+          "Trazabilidad hasta la cuenta contable",
+        ],
+      },
+      {
+        number: "02",
+        id: "indicadores-financieros",
+        title: "Indicadores financieros",
+        summary:
+          "Rentabilidad, liquidez, endeudamiento y capital de trabajo.",
+        details:
+          "Monitoreo ejecutivo de ratios financieros críticos, evolución de márgenes, liquidez corriente, endeudamiento y necesidades de capital de trabajo.",
+        icon: "Activity",
+        highlights: [
+          "Rentabilidad y márgenes operacionales",
+          "Liquidez y capital de trabajo",
+          "Estructura de endeudamiento",
+        ],
+      },
+      {
+        number: "03",
+        id: "personal",
+        title: "Personal",
+        summary:
+          "Dotación, rotación y costo laboral por cargo y centro de costo.",
+        details:
+          "Visibilidad directa desde remuneraciones de Softland sobre dotación activa, rotación, ausentismo y costo empresa desglosado por cargo y centro de costo.",
+        icon: "Users",
+        highlights: [
+          "Dotación y rotación mensual",
+          "Costo laboral por cargo",
+          "Distribución por centro de costo",
+        ],
+      },
+      {
+        number: "04",
+        id: "inventario",
+        title: "Inventario",
+        summary:
+          "Stock valorizado, alertas de quiebre y consumo por proyecto.",
+        details:
+          "Control continuo de bodegas, inventario valorizado, detección temprana de artículos críticos bajo stock mínimo y consumo imputado por obra o proyecto.",
+        icon: "Layers",
+        highlights: [
+          "Stock valorizado en tiempo real",
+          "Alertas tempranas de quiebre de stock",
+          "Consumo de materiales por proyecto",
+        ],
+      },
+      {
+        number: "05",
+        id: "proyectos",
+        title: "Proyectos",
+        summary: "Presupuesto contra real, valor ganado y carta Gantt.",
+        details:
+          "Control semanal de margen por proyecto comparando presupuesto aprobado contra costo real, avance físico, valor ganado y carta Gantt integrada.",
+        icon: "FolderKanban",
+        highlights: [
+          "Presupuesto contra ejecución real",
+          "Análisis de valor ganado y desviaciones",
+          "Seguimiento con carta Gantt",
+        ],
+      },
+    ] as FindexModuleItem[],
+  },
+
+  // Lámina 6 — Informe Mensual con IA
+  aiReport: {
+    eyebrow: "INFORME MENSUAL CON IA",
+    title: "Cada mes, sus números explicados en simple",
+    sampleLabel: "EJEMPLO ILUSTRATIVO · EMPRESA FICTICIA",
+    sampleHeading: "Resumen de marzo",
+    sampleSummary:
+      "Las ventas superaron el presupuesto en 8 %, pero el margen bruto bajó de 23 % a 21 % por mayores costos de materiales.",
+    sampleAlerts: [
+      "Proyecto A: materiales 14 % sobre lo presupuestado.",
+      "Bodega: 6 repuestos críticos bajo su stock mínimo.",
+    ],
+    sampleRecommendations: [
+      "Renegociar el pedido de materiales del proyecto A antes de la etapa 3.",
+      "Reponer los 6 repuestos esta semana para no detener mantenciones.",
+    ],
+    sampleFootnote: "Cada afirmación enlaza a la cifra que la respalda.",
+    benefits: [
+      {
+        title: "Para gerentes no financieros",
+        description: "Lenguaje simple, sin siglas contables.",
+      },
+      {
+        title: "Alertas a tiempo",
         description:
-          "Evolucionamos nuestros procesos incorporando automatización e inteligencia de negocios.",
+          "Desvíos de margen y quiebres de stock antes de que cuesten.",
+      },
+      {
+        title: "Sin datos personales",
+        description: "La IA solo ve cifras agregadas de la empresa.",
       },
     ],
   },
-  stats: [
-    {
-      label: "Proyectos Ejecutados",
-      value: "+140",
-      detail: "En infraestructura, energía, minería y servicios corporativos",
-    },
-    {
-      label: "Cumplimiento de Plazos",
-      value: "98.4%",
-      detail: "Control continuo mediante curvas S e hitos trazables",
-    },
-    {
-      label: "Clientes Corporativos",
-      value: "+45",
-      detail: "Relaciones de largo plazo con directorios y gerencias",
-    },
-    {
-      label: "Años de Trayectoria",
-      value: "14+",
-      detail: "Equipo senior multidisciplinario certificado",
-    },
-  ] as CorporateStatItem[],
-  services: [
-    {
-      id: "gestion-proyectos",
-      title: "Gestión Integral de Proyectos (PMO)",
-      summary:
-        "Planificación, control físico-financiero y gobierno de carteras complejas bajo estándares PMI.",
+
+  // Lámina 7 — Implementación en 5 semanas
+  implementation: {
+    eyebrow: "IMPLEMENTACIÓN",
+    title: "En marcha en 5 semanas, con cifras cuadradas antes de entregar",
+    steps: [
+      {
+        phase: "Diagnóstico",
+        week: "Semana 0",
+        description: "Su ERP, plan de cuentas, centros de costo y accesos",
+      },
+      {
+        phase: "Conexión",
+        week: "Semana 1",
+        description: "Datos cargados y actualizándose solos",
+      },
+      {
+        phase: "Primer borrador",
+        week: "Semana 2",
+        description: "Paneles con sus datos reales y su marca",
+      },
+      {
+        phase: "Cuadratura",
+        week: "Semanas 3 y 4",
+        description: "Cada cifra contra su contabilidad",
+      },
+      {
+        phase: "Puesta en marcha",
+        week: "Semana 5",
+        description: "Capacitación, guías y acta de entrega",
+      },
+    ] as FindexTimelineStep[],
+    neededFromYou: {
+      title: "Lo que necesitamos de usted",
       description:
-        "Implementamos oficinas de gestión de proyectos orientadas a resultados, asegurando visibilidad sobre plazos, costos, riesgos y entregables críticos desde la ingeniería conceptual hasta la puesta en marcha.",
-      icon: "FolderKanban",
-      highlights: [
-        "Control de avance y curvas S",
-        "Gestión de riesgos y cambios",
-        "Reportabilidad ejecutiva periódica",
-      ],
+        "Un usuario de solo lectura en Softland, un equipo para el conector y una persona que valide cifras.",
     },
-    {
-      id: "inteligencia-negocios",
-      title: "Inteligencia de Negocios y Analítica",
-      summary:
-        "Arquitectura de datos y tableros ejecutivos en Power BI para monitorear KPIs críticos en tiempo real.",
+    afterGoLive: {
+      title: "Después de la puesta en marcha",
       description:
-        "Diseñamos ecosistemas analíticos centralizados que integran ERP, tesorería, recursos humanos y control de operaciones, facilitando acceso seguro por perfil y toma de decisiones oportuna.",
-      icon: "BarChart3",
-      highlights: [
-        "Modelamiento financiero y operacional",
-        "Gobierno de acceso por roles",
-        "Automatización de reportes gerenciales",
-      ],
+        "Actualización diaria, soporte en 2 días hábiles, reunión mensual y mejoras continuas.",
     },
-    {
-      id: "finanzas-corporativas",
-      title: "Control Financiero y Presupuestario",
-      summary:
-        "Estructuración presupuestaria, flujo de caja proyectado y análisis de márgenes por centro de costo.",
-      description:
-        "Acompañamos a gerencias de administración y finanzas en el control exhaustivo de estados de resultados, conciliación bancaria y proyecciones de liquidez.",
-      icon: "Landmark",
-      highlights: [
-        "Estados de resultados consolidados",
-        "Flujo bancario y tesorería",
-        "Control de desviaciones presupuestarias",
-      ],
-    },
-    {
-      id: "ingenieria-operaciones",
-      title: "Ingeniería y Optimización Operacional",
-      summary:
-        "Diagnóstico de procesos, eficiencia en uso de horas hombre y rediseño de capacidades operativas.",
-      description:
-        "Evaluamos cuellos de botella en operaciones y contratos de servicios, estableciendo métricas claras de productividad, dotación óptima y estándares de calidad.",
-      icon: "Cpu",
-      highlights: [
-        "Distribución y productividad de HH",
-        "Auditoría de procesos operacionales",
-        "Estándares de calidad y cumplimiento",
-      ],
-    },
-  ] as CorporateServiceItem[],
-  projects: [
-    {
-      id: "prj-01",
-      title: "Transformación de Control de Gestión Corporativo",
-      client: "Grupo Industrial Andino (Placeholder)",
-      sector: "Energía e Infraestructura",
-      year: "2025",
-      metric: "-35% en tiempos de cierre mensual",
-      summary:
-        "Diseño e implementación de una plataforma centralizada de control presupuestario, flujo bancario y estado de resultados para 6 filiales operativas.",
-      tags: ["Power BI", "Finanzas", "PMO"],
-    },
-    {
-      id: "prj-02",
-      title: "Oficina de Proyectos para Expansión Operacional",
-      client: "Minera Pacífico Sur (Placeholder)",
-      sector: "Minería y Recursos",
-      year: "2024",
-      metric: "99.1% de adherencia presupuestaria",
-      summary:
-        "Dirección y control físico-financiero de cartera de 18 contratos de ingeniería y construcción, con seguimiento semanal de horas hombre y riesgos.",
-      tags: ["Control de Proyectos", "Distribución HH", "Ingeniería"],
-    },
-    {
-      id: "prj-03",
-      title: "Modernización de Analítica de Personas y Dotación",
-      client: "Servicios Logísticos Austral (Placeholder)",
-      sector: "Logística y Transporte",
-      year: "2025",
-      metric: "+22% en utilización productiva de HH",
-      summary:
-        "Estandarización de indicadores de recursos humanos, turnos y distribución de horas hombre en 12 centros de distribución a nivel nacional.",
-      tags: ["RRHH", "Analítica", "Operaciones"],
-    },
-    {
-      id: "prj-04",
-      title: "Consolidación Financiera Multiempresa",
-      client: "Holding Comercial Cordillera (Placeholder)",
-      sector: "Retail y Servicios",
-      year: "2024",
-      metric: "100% trazabilidad de flujo de caja",
-      summary:
-        "Automatización de reportes consolidados de tesorería y márgenes por unidad de negocio con acceso segmentado para gerentes y directores.",
-      tags: ["Tesorería", "Gobierno de Datos", "BI"],
-    },
-  ] as CorporateProjectItem[],
-  contact: {
-    email: "contacto@empresa-placeholder.com",
-    phone: "+56 2 2000 0000",
-    address: "Av. Apoquindo 4500, Piso 12, Santiago (Dirección Placeholder)",
-    hours: "Lunes a Viernes, 08:30 – 18:30 hrs",
   },
+
+  // Lámina 8 — Seguridad
+  security: {
+    eyebrow: "SEGURIDAD",
+    title: "Sus datos, protegidos y en Chile",
+    items: [
+      {
+        title: "Solo lectura",
+        description: "Nunca modificamos los registros de su Softland.",
+        icon: "KeyRound",
+      },
+      {
+        title: "Alojados en Chile",
+        description:
+          "En la región de Microsoft Azure en Chile, separados de los de otros clientes.",
+        icon: "Globe",
+      },
+      {
+        title: "Acceso en dos pasos",
+        description:
+          "Cada persona ve solo lo que le corresponde según su perfil.",
+        icon: "Lock",
+      },
+      {
+        title: "Ley de datos personales",
+        description:
+          "Acuerdo de tratamiento conforme a la Ley N° 21.719 y aviso de incidentes en 24 horas.",
+        icon: "ShieldCheck",
+      },
+    ] as FindexSecurityItem[],
+  },
+
+  // Lámina 9 — Comparativa "Por qué Findex"
+  comparison: {
+    eyebrow: "POR QUÉ FINDEX",
+    title: "Más rápido y económico que las alternativas",
+    rows: [
+      {
+        criterion: "Cuándo tiene la información",
+        excel: "Al cierre de mes",
+        analyst: "Según la persona",
+        consulting: "Al final del proyecto",
+        findex: "Cada semana",
+      },
+      {
+        criterion: "Costo",
+        excel: "Horas del equipo",
+        analyst: "Sueldo mensual completo",
+        consulting: "Proyecto por horas",
+        findex: "32 UF al mes",
+      },
+      {
+        criterion: "Tiempo para partir",
+        excel: "—",
+        analyst: "Selección y aprendizaje",
+        consulting: "Meses",
+        findex: "5 semanas",
+      },
+      {
+        criterion: "Explicaciones con IA",
+        excel: "No",
+        analyst: "Depende",
+        consulting: "Rara vez",
+        findex: "Sí, cada mes",
+      },
+      {
+        criterion: "Si alguien se va",
+        excel: "Se pierde el conocimiento",
+        analyst: "Se pierde el conocimiento",
+        consulting: "Hay que volver a contratar",
+        findex: "El servicio sigue",
+      },
+    ] as FindexComparisonRow[],
+  },
+
+  // Lámina 10 — Planes y Precios
+  pricing: {
+    eyebrow: "PLANES Y PRECIOS",
+    title: "Un precio simple, sin licencias que comprar",
+    planName: "Plan Completo · 5 módulos",
+    monthlyPrice: "32 UF",
+    monthlyUnit: "al mes + IVA",
+    implementationNote: "75 UF + IVA de implementación, una vez",
+    included: [
+      "5 módulos e intranet con su marca",
+      "Informe mensual con IA",
+      "Hasta 20 usuarios",
+      "Soporte, mantención y 2 h de ajustes al mes",
+    ],
+    addons: [
+      {
+        label: "Empresa adicional en el consolidado",
+        price: "15 UF + 6 UF/mes",
+      },
+      {
+        label: "Usuarios sobre 20",
+        price: "0,5 UF/mes c/u",
+      },
+      {
+        label: "Desarrollos a medida",
+        price: "1,6 UF/hora",
+      },
+      {
+        label: "Pago anual adelantado",
+        price: "1 mensualidad de descuento",
+      },
+    ],
+    termsNote:
+      "Contrato de 12 meses, renovable mes a mes. Softland y el equipo del conector son de cargo del cliente.",
+  },
+
+  // Lámina 11 — Equipo
+  team: {
+    eyebrow: "EQUIPO",
+    title: "Gestión, tecnología y contabilidad en un mismo equipo",
+    lead: "Combinamos control de gestión, ingeniería en inteligencia de negocios y rigor contable para entregar cifras cuadradas y accionables desde el primer mes.",
+    members: [
+      {
+        title: "Control de gestión",
+        description:
+          "Ingeniero civil industrial (PUC), con experiencia liderando control de gestión y de proyectos. Define qué mirar y cómo usarlo.",
+        icon: "UserCheck",
+      },
+      {
+        title: "Desarrollo BI",
+        description:
+          "Especialista en Power BI y modelos de datos. Construye las conexiones y los paneles, y los mantiene funcionando.",
+        icon: "Cpu",
+      },
+      {
+        title: "Contabilidad",
+        description:
+          "Contador colegiado. Asegura que cada cifra de los paneles cuadre con sus estados financieros.",
+        icon: "FileSpreadsheet",
+      },
+    ] as FindexTeamRole[],
+  },
+
+  // Lámina 12 — Siguiente Paso & Contacto
+  nextStep: {
+    eyebrow: "SIGUIENTE PASO",
+    title: "Veamos sus números",
+    subtitle:
+      "Le mostramos el módulo de estados financieros con la información de su empresa, sin costo, antes de que decida.",
+  },
+
+  contact: {
+    contactPerson: "Equipo Findex",
+    contactRole: "Control de Gestión · Findex",
+    email: "contacto@findex.cl",
+    phone: "+56 9 0000 0000",
+    address: "Santiago, Chile · Datos alojados en Microsoft Azure Chile",
+    hours: "Lunes a Viernes, 08:30 – 18:30 hrs (Soporte en 2 días hábiles)",
+  },
+
   navLinks: [
     { label: "Inicio", href: "/" },
-    { label: "Nosotros", href: "/nosotros" },
-    { label: "Servicios", href: "/servicios" },
-    { label: "Proyectos", href: "/proyectos" },
+    { label: "Módulos y Solución", href: "/servicios" },
+    { label: "Planes y Precios", href: "/proyectos" },
+    { label: "Equipo y Seguridad", href: "/nosotros" },
     { label: "Contacto", href: "/contacto" },
   ],
 };

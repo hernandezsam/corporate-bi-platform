@@ -8,7 +8,7 @@ import { LoginForm } from "@/components/intranet/login-form";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión — Intranet",
-  description: `Acceso privado a la intranet de informes Power BI de ${siteConfig.companyName}.`,
+  description: `Acceso privado a la intranet de control de gestión de ${siteConfig.companyName}.`,
 };
 
 export default function IntranetLoginPage() {
@@ -16,41 +16,48 @@ export default function IntranetLoginPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-12">
-      {/* Panel lateral corporativo oscuro */}
-      <div className="relative hidden flex-col justify-between bg-slate-950 p-10 text-white lg:col-span-5 lg:flex xl:p-14">
-        <BrandLogo variant="light" showTagline />
+      {/* Panel lateral Findex Navy */}
+      <div className="relative hidden flex-col justify-between bg-[#0D1B2A] bg-dark-grid p-10 text-white lg:col-span-5 lg:flex xl:p-14">
+        <BrandLogo variant="light" showTagline size="md" />
 
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-blue-300">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#0F9D8A]/30 bg-[#0F9D8A]/10 px-3 py-1 text-xs font-medium text-[#0F9D8A]">
             <ShieldCheck className="h-3.5 w-3.5" />
-            Entorno Corporativo Protegido
+            Intranet Findex · Datos en Chile
           </div>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white">
-            Portal privado de inteligencia de negocios y control de gestión
+            Claridad financiera, cada semana
           </h2>
-          <p className="text-sm leading-relaxed text-slate-400">
-            Centraliza los tableros financieros, operacionales y de recursos
-            humanos con control de acceso individual verificado en servidor.
+          <p className="text-sm leading-relaxed text-slate-300">
+            Acceda a sus módulos de estados financieros, indicadores, personal,
+            inventario y proyectos con control de acceso individual verificado en
+            servidor.
           </p>
 
           <div className="space-y-3 pt-2 text-xs text-slate-300">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-white/5">
-                <Lock className="h-4 w-4 text-blue-400" />
+                <Lock className="h-4 w-4 text-[#0F9D8A]" />
               </div>
-              <span>Autenticación obligatoria y políticas Row Level Security (RLS)</span>
+              <span>
+                Autenticación obligatoria y permisos por perfil (RLS)
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-md border border-white/10 bg-white/5">
-                <BarChart3 className="h-4 w-4 text-blue-400" />
+                <BarChart3 className="h-4 w-4 text-[#0F9D8A]" />
               </div>
-              <span>Visualización integrada y responsiva de informes Power BI</span>
+              <span>
+                Paneles Power BI integrados, actualizados diariamente sobre su
+                Softland
+              </span>
             </div>
           </div>
         </div>
 
         <p className="text-xs text-slate-500">
-          © {new Date().getFullYear()} {siteConfig.legalName}
+          © {new Date().getFullYear()} {siteConfig.legalName} · Claridad
+          financiera, cada semana
         </p>
       </div>
 
@@ -58,9 +65,13 @@ export default function IntranetLoginPage() {
       <div className="flex flex-col items-center justify-center bg-white px-6 py-12 lg:col-span-7">
         <div className="w-full max-w-md space-y-8">
           <div className="lg:hidden">
-            <BrandLogo showTagline />
+            <BrandLogo variant="dark" showTagline />
           </div>
-          <Suspense fallback={<div className="h-64 animate-pulse rounded-xl bg-slate-100" />}>
+          <Suspense
+            fallback={
+              <div className="h-64 animate-pulse rounded-xl bg-slate-100" />
+            }
+          >
             <LoginForm supabaseConfigured={configured} />
           </Suspense>
         </div>

@@ -1,85 +1,67 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { getIconByName } from "@/lib/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Servicios",
-  description: `Servicios de ingeniería, gestión de proyectos y analítica de ${siteConfig.companyName}.`,
+  title: "Módulos y Solución",
+  description:
+    "Cinco módulos de control de gestión e informe mensual con IA sobre su ERP Softland. En marcha en 5 semanas.",
 };
-
-const METHODOLOGY_STEPS = [
-  {
-    step: "01",
-    title: "Diagnóstico y Levantamiento",
-    description:
-      "Evaluamos procesos críticos, fuentes de datos y brechas de control financiero u operacional.",
-  },
-  {
-    step: "02",
-    title: "Arquitectura y Diseño",
-    description:
-      "Definimos indicadores clave, modelos de gobierno y flujos de información trazables.",
-  },
-  {
-    step: "03",
-    title: "Implementación y Despliegue",
-    description:
-      "Ponemos en producción tableros, controles y rutinas gerenciales junto a sus equipos.",
-  },
-  {
-    step: "04",
-    title: "Acompañamiento Continuo",
-    description:
-      "Monitoreo de adopción, evolución de métricas y soporte ejecutivo permanente.",
-  },
-];
 
 export default function ServiciosPage() {
   return (
     <div className="flex flex-col">
-      <section className="border-b border-slate-200/80 bg-slate-50/70 bg-subtle-grid py-16 lg:py-20">
+      <section className="bg-[#0D1B2A] bg-dark-grid py-16 text-white lg:py-20">
         <div className="container max-w-4xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-            Servicios Corporativos
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0F9D8A]">
+            {siteConfig.modules.eyebrow} · {siteConfig.howItWorks.eyebrow}
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-            Capacidades integradas para dirección financiera, operacional y de proyectos
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            {siteConfig.modules.title}
           </h1>
-          <p className="text-base leading-relaxed text-slate-600">
-            Combinamos experiencia técnica con plataformas de inteligencia de negocios
-            para entregar visibilidad ejecutiva confiable.
+          <p className="text-base leading-relaxed text-slate-300">
+            {siteConfig.whatWeDo.title}. {siteConfig.howItWorks.footnote}
           </p>
         </div>
       </section>
 
       <section className="py-16">
         <div className="container space-y-16">
-          <div className="grid gap-6 md:grid-cols-2">
-            {siteConfig.services.map((service) => {
-              const Icon = getIconByName(service.icon);
+          {/* Detalle de los 5 Módulos */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {siteConfig.modules.items.map((mod) => {
+              const Icon = getIconByName(mod.icon);
               return (
-                <Card key={service.id} className="flex flex-col justify-between">
-                  <CardContent className="p-8 space-y-4">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-900 text-white">
-                      <Icon className="h-5 w-5" />
+                <Card
+                  key={mod.id}
+                  className="flex flex-col justify-between border-slate-200/80 transition-all hover:border-[#0F9D8A]/40 hover:shadow-md"
+                >
+                  <CardContent className="p-7 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xl font-bold text-[#0F9D8A]">
+                        {mod.number}
+                      </span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B7A6B] text-white">
+                        <Icon className="h-5 w-5" />
+                      </div>
                     </div>
-                    <h2 className="text-xl font-semibold text-slate-950">
-                      {service.title}
+                    <h2 className="text-xl font-semibold text-[#0D1B2A]">
+                      {mod.title}
                     </h2>
                     <p className="text-sm leading-relaxed text-slate-600">
-                      {service.description}
+                      {mod.details}
                     </p>
                     <ul className="space-y-2 border-t border-slate-100 pt-4">
-                      {service.highlights.map((item) => (
+                      {mod.highlights.map((item) => (
                         <li
                           key={item}
-                          className="flex items-center gap-2.5 text-sm text-slate-700"
+                          className="flex items-center gap-2 text-xs text-slate-700"
                         >
-                          <Check className="h-4 w-4 text-blue-600" />
+                          <Check className="h-3.5 w-3.5 shrink-0 text-[#0F9D8A]" />
                           {item}
                         </li>
                       ))}
@@ -88,49 +70,85 @@ export default function ServiciosPage() {
                 </Card>
               );
             })}
+
+            {/* Tarjeta Informe Mensual IA */}
+            <Card className="border-[#0F9D8A]/30 bg-[#EBF7F5]">
+              <CardContent className="p-7 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#0B7A6B]">
+                    Incluido cada mes
+                  </span>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0D1B2A] text-[#0F9D8A]">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                </div>
+                <h2 className="text-xl font-semibold text-[#0D1B2A]">
+                  Informe mensual con IA
+                </h2>
+                <p className="text-sm leading-relaxed text-slate-700">
+                  {siteConfig.aiReport.title}. Cada afirmación enlaza a la cifra
+                  que la respalda, sin exponer datos personales.
+                </p>
+                <ul className="space-y-2 border-t border-[#0F9D8A]/20 pt-4">
+                  {siteConfig.aiReport.benefits.map((b) => (
+                    <li
+                      key={b.title}
+                      className="flex items-center gap-2 text-xs text-slate-700"
+                    >
+                      <Check className="h-3.5 w-3.5 shrink-0 text-[#0B7A6B]" />
+                      <span>
+                        <strong>{b.title}:</strong> {b.description}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-8 sm:p-10">
+          {/* Cronograma 5 semanas */}
+          <div className="rounded-2xl border border-slate-200 bg-[#F4F7F9] p-8 sm:p-10 space-y-8">
             <div className="max-w-2xl space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-                Metodología de Trabajo
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0F9D8A]">
+                {siteConfig.implementation.eyebrow}
               </p>
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-950">
-                Un proceso estructurado de principio a fin
+              <h2 className="text-2xl font-semibold tracking-tight text-[#0D1B2A]">
+                {siteConfig.implementation.title}
               </h2>
             </div>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {METHODOLOGY_STEPS.map((item) => (
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {siteConfig.implementation.steps.map((step, idx) => (
                 <div
-                  key={item.step}
-                  className="rounded-xl border border-slate-200/80 bg-white p-5"
+                  key={step.phase}
+                  className="rounded-xl border border-slate-200 bg-white p-5 space-y-2"
                 >
-                  <span className="text-xs font-semibold text-blue-600">
-                    {item.step}
+                  <span className="inline-block rounded bg-[#EBF7F5] px-2 py-0.5 text-[11px] font-semibold text-[#0B7A6B]">
+                    {step.week}
                   </span>
-                  <h3 className="mt-2 text-sm font-semibold text-slate-900">
-                    {item.title}
+                  <h3 className="text-sm font-semibold text-[#0D1B2A]">
+                    {idx + 1}. {step.phase}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
-                    {item.description}
+                  <p className="text-xs leading-relaxed text-slate-600">
+                    {step.description}
                   </p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col items-start justify-between gap-4 rounded-xl bg-slate-950 p-8 text-white sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-[#0D1B2A] p-8 text-white sm:flex-row sm:items-center">
             <div>
               <h3 className="text-lg font-semibold">
-                Solicite una propuesta adaptada a su organización
+                {siteConfig.nextStep.title}
               </h3>
-              <p className="mt-1 text-sm text-slate-400">
-                Nuestro equipo responde en menos de 24 horas hábiles.
+              <p className="mt-1 text-sm text-slate-300">
+                {siteConfig.nextStep.subtitle}
               </p>
             </div>
             <Button asChild variant="brand">
               <Link href="/contacto">
-                Solicitar reunión
+                Solicitar demo sin costo
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

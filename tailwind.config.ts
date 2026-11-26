@@ -18,6 +18,15 @@ const config: Config = {
     },
     extend: {
       colors: {
+        findex: {
+          navy: "#0D1B2A",
+          "navy-light": "#162A3E",
+          teal: "#0F9D8A",
+          "teal-dark": "#0B7A6B",
+          "teal-soft": "#EBF7F5",
+          surface: "#F4F7F9",
+          alert: "#E0532C",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

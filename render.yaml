@@ -25,6 +25,6 @@ services:
       - key: NEXT_PUBLIC_SITE_URL
         sync: false
       - key: NEXT_PUBLIC_COMPANY_NAME
-        value: "Corporación Meridian"
+        value: "Findex"
       - key: NEXT_PUBLIC_COMPANY_TAGLINE
-        value: "Ingeniería, Gestión y Analítica Estratégica"
+        value: "Claridad financiera, cada semana"

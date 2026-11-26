@@ -55,10 +55,10 @@ export function AdminShell({ profile, children }: AdminShellProps) {
   }
 
   const SidebarContent = (
-    <div className="flex h-full flex-col bg-slate-950 text-slate-300">
+    <div className="flex h-full flex-col bg-[#0D1B2A] text-slate-300">
       <div className="flex h-16 items-center justify-between border-b border-white/10 px-5">
         <Link href="/admin" onClick={() => setSidebarOpen(false)}>
-          <BrandLogo variant="light" />
+          <BrandLogo variant="light" size="sm" />
         </Link>
         <button
           type="button"
@@ -71,7 +71,7 @@ export function AdminShell({ profile, children }: AdminShellProps) {
       </div>
 
       <div className="px-4 pt-4">
-        <div className="flex items-center gap-2 rounded-lg border border-blue-500/25 bg-blue-500/10 px-3 py-2 text-xs font-medium text-blue-300">
+        <div className="flex items-center gap-2 rounded-lg border border-[#0F9D8A]/30 bg-[#0F9D8A]/10 px-3 py-2 text-xs font-medium text-[#0F9D8A]">
           <Shield className="h-3.5 w-3.5 shrink-0" />
           <span>Consola de Administración</span>
         </div>
