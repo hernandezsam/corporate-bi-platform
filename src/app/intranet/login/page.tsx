@@ -49,7 +49,7 @@ export default function IntranetLoginPage() {
               </div>
               <span>
                 Paneles Power BI integrados, actualizados diariamente sobre su
-                Softland
+                ERP
               </span>
             </div>
           </div>

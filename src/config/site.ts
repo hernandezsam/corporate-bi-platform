@@ -67,14 +67,14 @@ export const siteConfig = {
     "Claridad financiera, cada semana",
   legalName: "Findex",
   description:
-    "Paneles de gestión y análisis con IA para medianas empresas que usan Softland. En marcha en 5 semanas, sin cambiar de sistema.",
+    "Paneles de gestión y análisis con IA para medianas empresas que usan ERP. En marcha en 5 semanas, sin cambiar de sistema.",
 
   // Lámina 1 — Portada / Hero
   hero: {
     eyebrow: "CONTROL DE GESTIÓN CON INTELIGENCIA ARTIFICIAL",
     title: "Claridad financiera, cada semana",
     subtitle:
-      "Paneles de gestión y análisis con IA para medianas empresas que usan Softland. En marcha en 5 semanas, sin cambiar de sistema.",
+      "Paneles de gestión y análisis con IA para medianas empresas que usan ERP. En marcha en 5 semanas, sin cambiar de sistema.",
     primaryCta: "Solicitar demo sin costo",
     secondaryCta: "Ver los 5 módulos",
   },
@@ -112,7 +112,7 @@ export const siteConfig = {
   // Lámina 3 — Qué Hacemos
   whatWeDo: {
     eyebrow: "QUÉ HACEMOS",
-    title: "Arrendamos control de gestión con IA, sobre su Softland",
+    title: "Arrendamos control de gestión con IA, sobre su ERP",
     pillars: [
       {
         title: "Margen por proyecto cada semana",
@@ -125,7 +125,7 @@ export const siteConfig = {
         icon: "Cpu",
       },
       {
-        title: "Sobre su Softland",
+        title: "Sobre su ERP",
         subtitle: "sin cambiar de ERP ni de procesos",
         icon: "Database",
       },
@@ -153,10 +153,10 @@ export const siteConfig = {
   // Lámina 4 — Cómo Funciona
   howItWorks: {
     eyebrow: "CÓMO FUNCIONA",
-    title: "Sus datos de Softland, convertidos en decisiones",
+    title: "Sus datos del ERP, convertidos en decisiones",
     steps: [
       {
-        title: "Su Softland",
+        title: "Su ERP",
         subtitle: "contabilidad, inventario, remuneraciones",
         icon: "Database",
       },
@@ -202,7 +202,7 @@ export const siteConfig = {
         summary:
           "Resultado y balance por empresa y centro de costo, hasta la cuenta.",
         details:
-          "Estado de resultados y balance general estructurados según su plan de cuentas en Softland, con apertura por empresa, unidad de negocio y centro de costo hasta el nivel de cuenta contable.",
+          "Estado de resultados y balance general estructurados según su plan de cuentas en el ERP, con apertura por empresa, unidad de negocio y centro de costo hasta el nivel de cuenta contable.",
         icon: "Landmark",
         highlights: [
           "Estado de resultados y balance general",
@@ -232,7 +232,7 @@ export const siteConfig = {
         summary:
           "Dotación, rotación y costo laboral por cargo y centro de costo.",
         details:
-          "Visibilidad directa desde remuneraciones de Softland sobre dotación activa, rotación, ausentismo y costo empresa desglosado por cargo y centro de costo.",
+          "Visibilidad directa desde remuneraciones del ERP sobre dotación activa, rotación, ausentismo y costo empresa desglosado por cargo y centro de costo.",
         icon: "Users",
         highlights: [
           "Dotación y rotación mensual",
@@ -340,7 +340,7 @@ export const siteConfig = {
     neededFromYou: {
       title: "Lo que necesitamos de usted",
       description:
-        "Un usuario de solo lectura en Softland, un equipo para el conector y una persona que valide cifras.",
+        "Un usuario de solo lectura en su ERP, un equipo para el conector y una persona que valide cifras.",
     },
     afterGoLive: {
       title: "Después de la puesta en marcha",
@@ -356,7 +356,7 @@ export const siteConfig = {
     items: [
       {
         title: "Solo lectura",
-        description: "Nunca modificamos los registros de su Softland.",
+        description: "Nunca modificamos los registros de su ERP.",
         icon: "KeyRound",
       },
       {
@@ -456,7 +456,7 @@ export const siteConfig = {
       },
     ],
     termsNote:
-      "Contrato inicial de 12 meses, renovable mes a mes. Softland y el equipo del conector son de cargo del cliente.",
+      "Contrato inicial de 12 meses, renovable mes a mes. El ERP y el equipo del conector son de cargo del cliente.",
   },
 
   // Lámina 11 — Equipo

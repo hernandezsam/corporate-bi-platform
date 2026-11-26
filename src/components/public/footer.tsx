@@ -70,7 +70,7 @@ export function PublicFooter() {
             © {year} {siteConfig.legalName}. Todos los derechos reservados.
           </p>
           <p>
-            Control de gestión con IA sobre Softland · Datos alojados en Microsoft
+            Control de gestión con IA sobre su ERP · Datos alojados en Microsoft
             Azure Chile
           </p>
         </div>

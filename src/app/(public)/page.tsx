@@ -77,7 +77,7 @@ export default function HomePage() {
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 text-xs text-slate-400">
                 <span className="inline-flex items-center gap-1.5">
                   <Check className="h-3.5 w-3.5 text-[#0F9D8A]" />
-                  Sobre su Softland
+                  Sobre su ERP
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <Check className="h-3.5 w-3.5 text-[#0F9D8A]" />

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Módulos y Solución",
   description:
-    "Cinco módulos de control de gestión e informe mensual con IA sobre su ERP Softland. En marcha en 5 semanas.",
+    "Cinco módulos de control de gestión e informe mensual con IA sobre su ERP. En marcha en 5 semanas.",
 };
 
 export default function ServiciosPage() {
