@@ -28,3 +28,9 @@ services:
         value: "Findex"
       - key: NEXT_PUBLIC_COMPANY_TAGLINE
         value: "Claridad financiera, cada semana"
+      - key: RESEND_API_KEY
+        sync: false
+      - key: CONTACT_NOTIFY_EMAIL
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: "Findex <onboarding@resend.dev>"

@@ -7,6 +7,7 @@ import {
   getClientIp,
   isSameOriginRequest,
 } from "@/lib/security";
+import { sendContactNotificationEmail } from "@/services/email.service";
 
 export async function POST(request: Request) {
   try {
@@ -76,6 +77,16 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    // Enviar notificación por correo vía Resend (no bloquea el guardado si aún no está configurado)
+    await sendContactNotificationEmail({
+      full_name: parsed.data.full_name,
+      email: parsed.data.email,
+      company: parsed.data.company || null,
+      phone: parsed.data.phone || null,
+      subject: parsed.data.subject,
+      message: parsed.data.message,
+    });
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch {
