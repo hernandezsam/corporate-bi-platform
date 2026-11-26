@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import {
-  AlertTriangle,
   ArrowLeft,
   Calendar,
   Loader2,
@@ -17,19 +16,13 @@ import { getIconByName } from "@/lib/icons";
 import { formatDateTime } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Alert } from "@/components/ui/alert";
 
 interface PowerBiViewerProps {
   report: Report;
   embedConfig: PowerBiEmbedConfig;
-  isAdmin: boolean;
 }
 
-export function PowerBiViewer({
-  report,
-  embedConfig,
-  isAdmin,
-}: PowerBiViewerProps) {
+export function PowerBiViewer({ report, embedConfig }: PowerBiViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [iframeKey, setIframeKey] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -104,19 +97,6 @@ export function PowerBiViewer({
         </div>
       </div>
 
-      {/* Aviso de seguridad visible solo a administradores si la URL parece "Publish to web" */}
-      {isAdmin && embedConfig.isPublicPublishToWebWarning && (
-        <Alert variant="warning">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-          <div className="text-xs leading-relaxed">
-            <strong>Aviso de seguridad Power BI:</strong> La URL configurada
-            parece corresponder a un enlace público (&quot;Publish to web&quot;).
-            Para información corporativa confidencial utilice enlaces de inserción
-            autenticados o Power BI Embedded con Microsoft Entra ID.
-          </div>
-        </Alert>
-      )}
-
       {/* Contenedor Responsive del Iframe */}
       <div
         ref={containerRef}
@@ -124,7 +104,7 @@ export function PowerBiViewer({
       >
         {loading && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-slate-50/90 backdrop-blur-sm">
-            <Loader2 className="h-7 w-7 animate-spin text-blue-600" />
+            <Loader2 className="h-7 w-7 animate-spin text-[#0F9D8A]" />
             <p className="text-xs font-medium text-slate-600">
               Cargando informe de Power BI...
             </p>

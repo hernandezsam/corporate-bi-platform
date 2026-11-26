@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle,
-  AlertTriangle,
   ArrowLeft,
   CheckCircle2,
   Eye,
@@ -16,7 +15,6 @@ import {
 } from "lucide-react";
 import type { Category, Profile, Report } from "@/types/database";
 import { AVAILABLE_ICONS, getIconByName } from "@/lib/icons";
-import { isLikelyPublishToWebUrl } from "@/services/powerbi.service";
 import { formatDateTime } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -298,15 +296,6 @@ export function ReportDetailEditor({
                     setForm({ ...form, powerbi_url: e.target.value })
                   }
                 />
-                {isLikelyPublishToWebUrl(form.powerbi_url) && (
-                  <Alert variant="warning" className="mt-2 py-2 text-xs">
-                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                    <span>
-                      Advertencia: enlace detectado como &quot;Publish to web&quot;.
-                      No utilizar para datos confidenciales.
-                    </span>
-                  </Alert>
-                )}
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">

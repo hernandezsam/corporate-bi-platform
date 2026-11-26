@@ -63,7 +63,6 @@ export default async function IntranetReportViewerPage({
       <PowerBiViewer
         report={report as Report}
         embedConfig={embedConfig}
-        isAdmin={profile.role === "ADMIN"}
       />
     );
   } catch {
