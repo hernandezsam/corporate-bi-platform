@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Shield,
   User,
   X,
@@ -34,8 +36,16 @@ export function IntranetShell({
 }: IntranetShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const isReportView = pathname.startsWith("/intranet/reportes/");
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(isReportView);
   const [signingOut, setSigningOut] = useState(false);
+
+  // Al entrar a visualizar un informe, colapsar sidebar automáticamente para maximizar área útil
+  useEffect(() => {
+    setDesktopCollapsed(isReportView);
+  }, [isReportView]);
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -51,7 +61,7 @@ export function IntranetShell({
 
   const SidebarContent = (
     <div className="flex h-full flex-col bg-[#0D1B2A] text-slate-300">
-      <div className="flex h-16 items-center justify-between border-b border-white/10 px-5">
+      <div className="flex h-14 items-center justify-between border-b border-white/10 px-4">
         <Link href="/intranet/dashboard" onClick={() => setSidebarOpen(false)}>
           <BrandLogo variant="light" size="sm" />
         </Link>
@@ -62,6 +72,15 @@ export function IntranetShell({
           aria-label="Cerrar menú lateral"
         >
           <X className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          className="hidden rounded-md p-1 text-slate-400 hover:bg-white/10 hover:text-white lg:inline-flex"
+          onClick={() => setDesktopCollapsed(true)}
+          title="Ocultar barra lateral"
+          aria-label="Ocultar barra lateral"
+        >
+          <PanelLeftClose className="h-4 w-4" />
         </button>
       </div>
 
@@ -139,7 +158,7 @@ export function IntranetShell({
                     className={cn(
                       "flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
                       active
-                        ? "bg-blue-600/20 text-blue-200 border border-blue-500/30"
+                        ? "border border-[#0F9D8A]/40 bg-[#0F9D8A]/20 text-teal-200"
                         : "text-slate-400 hover:bg-white/5 hover:text-white"
                     )}
                   >
@@ -153,7 +172,7 @@ export function IntranetShell({
         </div>
       </div>
 
-      <div className="border-t border-white/10 p-4 space-y-2.5">
+      <div className="border-t border-white/10 p-4 space-y-2">
         <Link
           href="/"
           className="flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
@@ -176,10 +195,12 @@ export function IntranetShell({
 
   return (
     <div className="flex min-h-screen bg-slate-50/80">
-      {/* Sidebar Desktop */}
-      <aside className="hidden w-64 shrink-0 border-r border-slate-800 lg:block">
-        <div className="sticky top-0 h-screen">{SidebarContent}</div>
-      </aside>
+      {/* Sidebar Desktop colapsable */}
+      {!desktopCollapsed && (
+        <aside className="hidden w-60 shrink-0 border-r border-slate-800 lg:block">
+          <div className="sticky top-0 h-screen">{SidebarContent}</div>
+        </aside>
+      )}
 
       {/* Sidebar Mobile Drawer */}
       {sidebarOpen && (
@@ -194,31 +215,66 @@ export function IntranetShell({
 
       {/* Contenido Principal */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur-md sm:px-6">
-          <div className="flex items-center gap-3">
+        <header
+          className={cn(
+            "sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/95 backdrop-blur-md",
+            isReportView ? "h-11 px-3 sm:px-4" : "h-14 px-4 sm:px-6"
+          )}
+        >
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="rounded-md p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
+              className="rounded-md p-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
               aria-label="Abrir menú lateral"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-4 w-4" />
             </button>
-            <div className="hidden sm:block">
-              <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
-                Intranet Corporativa
-              </p>
-              <p className="text-sm font-semibold text-slate-900">
-                Portal de Informes Power BI
-              </p>
-            </div>
+
+            {desktopCollapsed && (
+              <button
+                type="button"
+                onClick={() => setDesktopCollapsed(false)}
+                className="hidden items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#0D1B2A] lg:inline-flex"
+                title="Mostrar menú de informes"
+              >
+                <PanelLeftOpen className="h-3.5 w-3.5 text-[#0F9D8A]" />
+                <span>Informes</span>
+              </button>
+            )}
+
+            {isReportView ? (
+              <Link
+                href="/intranet/dashboard"
+                className="hidden items-center gap-2 sm:inline-flex"
+              >
+                <BrandLogo variant="dark" size="sm" />
+              </Link>
+            ) : (
+              <div className="hidden sm:block">
+                <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                  Intranet Findex
+                </p>
+                <p className="text-xs font-semibold text-[#0D1B2A]">
+                  Portal de Informes Power BI
+                </p>
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {profile.role === "ADMIN" && (
-              <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
+              <Button
+                asChild
+                size="sm"
+                variant="outline"
+                className={cn(
+                  "hidden sm:inline-flex",
+                  isReportView ? "h-7 px-2.5 text-[11px]" : "h-8 text-xs"
+                )}
+              >
                 <Link href="/admin">
-                  <Shield className="h-3.5 w-3.5 text-blue-600" />
+                  <Shield className="h-3.5 w-3.5 text-[#0F9D8A]" />
                   Administración
                 </Link>
               </Button>
@@ -226,24 +282,22 @@ export function IntranetShell({
 
             <Link
               href="/intranet/perfil"
-              className="flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50/70 py-1 pl-1.5 pr-3 transition-colors hover:bg-slate-100"
+              className={cn(
+                "flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50/70 transition-colors hover:bg-slate-100",
+                isReportView ? "py-0.5 pl-1 pr-2.5" : "py-1 pl-1.5 pr-3"
+              )}
             >
-              <Avatar className="h-7 w-7">
-                <AvatarFallback className="text-[11px]">
+              <Avatar className={isReportView ? "h-6 w-6" : "h-7 w-7"}>
+                <AvatarFallback className="bg-[#0D1B2A] text-[10px]">
                   {getInitials(profile.full_name)}
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden text-left sm:block">
-                <p className="text-xs font-medium leading-none text-slate-900">
-                  {profile.full_name}
-                </p>
-                <p className="mt-0.5 text-[10px] leading-none text-slate-500">
-                  {profile.email}
-                </p>
-              </div>
+              <span className="hidden text-xs font-medium text-slate-800 sm:inline">
+                {profile.full_name}
+              </span>
               <Badge
                 variant={profile.role === "ADMIN" ? "info" : "secondary"}
-                className="text-[10px] px-1.5 py-0"
+                className="px-1.5 py-0 text-[10px]"
               >
                 {profile.role}
               </Badge>
@@ -252,17 +306,25 @@ export function IntranetShell({
             <Button
               variant="ghost"
               size="icon"
+              className={isReportView ? "h-7 w-7" : "h-8 w-8"}
               onClick={handleSignOut}
               disabled={signingOut}
               title="Cerrar sesión"
               aria-label="Cerrar sesión"
             >
-              <LogOut className="h-4 w-4 text-slate-500" />
+              <LogOut className="h-3.5 w-3.5 text-slate-500" />
             </Button>
           </div>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main
+          className={cn(
+            "flex-1",
+            isReportView ? "p-1.5 sm:p-2" : "p-4 sm:p-6 lg:p-8"
+          )}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

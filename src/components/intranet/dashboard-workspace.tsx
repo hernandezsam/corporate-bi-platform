@@ -127,45 +127,42 @@ export function DashboardWorkspace({
         </div>
       </div>
 
-      {/* Área de visualización integrada rápida (si el usuario selecciona vista en línea) */}
+      {/* Área de visualización integrada rápida (maximizada) */}
       {quickPreviewReport && (
         <Card className="overflow-hidden border-slate-300 shadow-md">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-950 px-5 py-3 text-white">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <Sparkles className="h-4 w-4 shrink-0 text-blue-400" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold">
-                  {quickPreviewReport.name}
-                </p>
-                <p className="text-[11px] text-slate-400">
-                  {quickPreviewReport.category} · Actualizado{" "}
-                  {formatDate(quickPreviewReport.updated_at)}
-                </p>
-              </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-[#0D1B2A] px-4 py-2 text-white">
+            <div className="flex min-w-0 items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#0F9D8A]" />
+              <p className="truncate text-sm font-semibold">
+                {quickPreviewReport.name}
+              </p>
+              <span className="hidden text-[11px] text-slate-400 sm:inline">
+                · {quickPreviewReport.category}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Button
                 asChild
                 size="sm"
-                variant="secondary"
-                className="h-8 text-xs"
+                variant="brand"
+                className="h-7 px-2.5 text-xs"
               >
                 <Link href={`/intranet/reportes/${quickPreviewReport.id}`}>
                   <Maximize2 className="h-3.5 w-3.5" />
-                  Pantalla dedicada
+                  Ampliar vista
                 </Link>
               </Button>
               <button
                 type="button"
                 onClick={() => setQuickPreviewReport(null)}
-                className="rounded-md p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+                className="rounded-md p-1 text-slate-400 hover:bg-white/10 hover:text-white"
                 aria-label="Cerrar visor"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
           </div>
-          <div className="relative h-[68vh] min-h-[460px] w-full bg-slate-100">
+          <div className="relative h-[82vh] min-h-[600px] w-full bg-slate-100">
             <iframe
               title={quickPreviewReport.name}
               src={quickPreviewReport.powerbi_url}
