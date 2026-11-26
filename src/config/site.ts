@@ -397,7 +397,7 @@ export const siteConfig = {
         excel: "Horas del equipo",
         analyst: "Sueldo mensual completo",
         consulting: "Proyecto por horas",
-        findex: "32 UF al mes",
+        findex: "Arriendo mensual fijo",
       },
       {
         criterion: "Tiempo para partir",
@@ -423,40 +423,40 @@ export const siteConfig = {
     ] as FindexComparisonRow[],
   },
 
-  // Lámina 10 — Planes y Precios
+  // Lámina 10 — Modalidad y Planes (sin montos públicos)
   pricing: {
-    eyebrow: "PLANES Y PRECIOS",
-    title: "Un precio simple, sin licencias que comprar",
+    eyebrow: "MODALIDAD Y PLANES",
+    title: "Un servicio simple, sin licencias que comprar",
     planName: "Plan Completo · 5 módulos",
-    monthlyPrice: "32 UF",
-    monthlyUnit: "al mes + IVA",
-    implementationNote: "75 UF + IVA de implementación, una vez",
+    headline: "Arriendo mensual",
+    subheadline: "Implementación en 5 semanas · Propuesta según su operación",
     included: [
       "5 módulos e intranet con su marca",
       "Informe mensual con IA",
-      "Hasta 20 usuarios",
-      "Soporte, mantención y 2 h de ajustes al mes",
+      "Plan base para equipos de hasta 20 usuarios",
+      "Soporte, mantención y ajustes mensuales incluidos",
     ],
+    addonsTitle: "Opcionales y escalamiento",
     addons: [
       {
-        label: "Empresa adicional en el consolidado",
-        price: "15 UF + 6 UF/mes",
+        label: "Empresas adicionales en el consolidado",
+        detail: "Consolidación multiempresa",
       },
       {
-        label: "Usuarios sobre 20",
-        price: "0,5 UF/mes c/u",
+        label: "Usuarios adicionales sobre el plan base",
+        detail: "Escalable según su organización",
       },
       {
-        label: "Desarrollos a medida",
-        price: "1,6 UF/hora",
+        label: "Desarrollos y paneles a medida",
+        detail: "Según requerimiento",
       },
       {
-        label: "Pago anual adelantado",
-        price: "1 mensualidad de descuento",
+        label: "Modalidad anual",
+        detail: "Condiciones preferenciales",
       },
     ],
     termsNote:
-      "Contrato de 12 meses, renovable mes a mes. Softland y el equipo del conector son de cargo del cliente.",
+      "Contrato inicial de 12 meses, renovable mes a mes. Softland y el equipo del conector son de cargo del cliente.",
   },
 
   // Lámina 11 — Equipo
@@ -506,7 +506,7 @@ export const siteConfig = {
   navLinks: [
     { label: "Inicio", href: "/" },
     { label: "Módulos y Solución", href: "/servicios" },
-    { label: "Planes y Precios", href: "/proyectos" },
+    { label: "Planes y Modalidad", href: "/proyectos" },
     { label: "Equipo y Seguridad", href: "/nosotros" },
     { label: "Contacto", href: "/contacto" },
   ],

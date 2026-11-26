@@ -129,9 +129,10 @@ export default function HomePage() {
 
                 <div className="mt-6 flex items-center justify-between rounded-xl border border-white/10 bg-[#0D1B2A]/80 px-4 py-3">
                   <div>
-                    <p className="text-xs text-slate-400">Arriendo mensual</p>
-                    <p className="text-base font-semibold text-white">
-                      <span className="text-[#0F9D8A]">32 UF</span> al mes + IVA
+                    <p className="text-xs text-slate-400">Puesta en marcha</p>
+                    <p className="text-sm font-semibold text-white">
+                      <span className="text-[#0F9D8A]">5 semanas</span> · Sin
+                      licencias Power BI
                     </p>
                   </div>
                   <Link
@@ -639,7 +640,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Planes y Precios */}
+          {/* Modalidad y Planes */}
           <div className="space-y-6">
             <div className="max-w-3xl space-y-2">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0F9D8A]">
@@ -655,16 +656,11 @@ export default function HomePage() {
                 <p className="text-sm font-medium text-slate-300">
                   {siteConfig.pricing.planName}
                 </p>
-                <div className="mt-4 flex items-baseline gap-3">
-                  <span className="text-5xl font-bold tracking-tight text-[#0F9D8A]">
-                    {siteConfig.pricing.monthlyPrice}
-                  </span>
-                  <span className="text-sm text-slate-300">
-                    {siteConfig.pricing.monthlyUnit}
-                  </span>
-                </div>
+                <p className="mt-4 text-3xl font-bold tracking-tight text-[#0F9D8A]">
+                  {siteConfig.pricing.headline}
+                </p>
                 <p className="mt-2 text-sm text-slate-300">
-                  {siteConfig.pricing.implementationNote}
+                  {siteConfig.pricing.subheadline}
                 </p>
 
                 <ul className="mt-7 space-y-3 border-t border-white/10 pt-6 text-sm text-slate-200">
@@ -679,7 +675,7 @@ export default function HomePage() {
                 <div className="mt-8">
                   <Button asChild variant="brand" size="lg" className="w-full">
                     <Link href="/contacto">
-                      Solicitar demostración gratuita
+                      Solicitar propuesta y demo gratuita
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -690,7 +686,7 @@ export default function HomePage() {
                 <Card>
                   <CardContent className="p-7">
                     <h3 className="text-base font-semibold text-[#0B7A6B]">
-                      Adicionales
+                      {siteConfig.pricing.addonsTitle}
                     </h3>
                     <div className="mt-4 divide-y divide-slate-100">
                       {siteConfig.pricing.addons.map((addon) => (
@@ -699,8 +695,8 @@ export default function HomePage() {
                           className="flex items-center justify-between gap-4 py-3.5 text-sm"
                         >
                           <span className="text-slate-700">{addon.label}</span>
-                          <span className="shrink-0 font-semibold text-[#0D1B2A]">
-                            {addon.price}
+                          <span className="shrink-0 text-xs font-semibold text-[#0B7A6B]">
+                            {addon.detail}
                           </span>
                         </div>
                       ))}

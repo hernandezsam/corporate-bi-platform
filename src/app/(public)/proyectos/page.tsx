@@ -6,9 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Planes y Precios",
+  title: "Planes y Modalidad",
   description:
-    "Un precio simple, sin licencias Power BI que comprar: 32 UF al mes + IVA con 5 módulos, intranet y análisis con IA.",
+    "Servicio integral de control de gestión con IA en modalidad de arriendo mensual, con 5 módulos, intranet con su marca y sin licencias Power BI.",
 };
 
 export default function PlanesPage() {
@@ -31,22 +31,17 @@ export default function PlanesPage() {
 
       <section className="py-16">
         <div className="container space-y-16">
-          {/* Plan Completo + Adicionales */}
+          {/* Plan Completo + Opcionales */}
           <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
             <div className="rounded-2xl bg-[#0D1B2A] p-8 text-white shadow-xl lg:col-span-6">
               <p className="text-sm font-medium text-slate-300">
                 {siteConfig.pricing.planName}
               </p>
-              <div className="mt-4 flex items-baseline gap-3">
-                <span className="text-5xl font-bold tracking-tight text-[#0F9D8A]">
-                  {siteConfig.pricing.monthlyPrice}
-                </span>
-                <span className="text-sm text-slate-300">
-                  {siteConfig.pricing.monthlyUnit}
-                </span>
-              </div>
+              <p className="mt-4 text-3xl font-bold tracking-tight text-[#0F9D8A]">
+                {siteConfig.pricing.headline}
+              </p>
               <p className="mt-2 text-sm text-slate-300">
-                {siteConfig.pricing.implementationNote}
+                {siteConfig.pricing.subheadline}
               </p>
 
               <ul className="mt-7 space-y-3 border-t border-white/10 pt-6 text-sm text-slate-200">
@@ -61,7 +56,7 @@ export default function PlanesPage() {
               <div className="mt-8">
                 <Button asChild variant="brand" size="lg" className="w-full">
                   <Link href="/contacto">
-                    Solicitar demo gratuita con sus datos
+                    Solicitar propuesta y demo gratuita
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -72,7 +67,7 @@ export default function PlanesPage() {
               <Card>
                 <CardContent className="p-7">
                   <h2 className="text-lg font-semibold text-[#0B7A6B]">
-                    Adicionales
+                    {siteConfig.pricing.addonsTitle}
                   </h2>
                   <div className="mt-4 divide-y divide-slate-100">
                     {siteConfig.pricing.addons.map((addon) => (
@@ -81,8 +76,8 @@ export default function PlanesPage() {
                         className="flex items-center justify-between gap-4 py-4 text-sm"
                       >
                         <span className="text-slate-700">{addon.label}</span>
-                        <span className="shrink-0 font-semibold text-[#0D1B2A]">
-                          {addon.price}
+                        <span className="shrink-0 text-xs font-semibold text-[#0B7A6B]">
+                          {addon.detail}
                         </span>
                       </div>
                     ))}
