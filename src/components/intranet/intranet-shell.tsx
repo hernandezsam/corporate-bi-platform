@@ -163,7 +163,7 @@ export function IntranetShell({
                     className={cn(
                       "flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
                       active
-                        ? "border border-[#0F9D8A]/40 bg-[#0F9D8A]/20 text-teal-200"
+                        ? "border border-[#D99A55]/45 bg-[#D99A55]/15 text-[#F6D3A5]"
                         : "text-slate-400 hover:bg-white/5 hover:text-white"
                     )}
                   >

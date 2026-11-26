@@ -14,7 +14,7 @@ export function PublicNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="focus:outline-none">
           <BrandLogo variant="dark" size="md" />
@@ -34,25 +34,31 @@ export function PublicNavbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
+                  "relative rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-[#EBF7F5] text-[#0B7A6B]"
+                    ? "bg-[#FDF6EC] text-[#0D1B2A]"
                     : "text-slate-600 hover:bg-slate-50 hover:text-[#0D1B2A]"
                 )}
               >
                 {item.label}
+                {isActive && (
+                  <span
+                    className="absolute inset-x-3 bottom-0.5 h-0.5 rounded-full bg-[#D99A55]"
+                    aria-hidden="true"
+                  />
+                )}
               </Link>
             );
           })}
         </nav>
 
         <div className="hidden items-center gap-2.5 lg:flex">
-          <Button asChild variant="ghost" size="sm" className="h-9 px-3.5 text-xs">
+          <Button asChild variant="amber" size="sm" className="h-9 px-3.5 text-xs">
             <Link href="/contacto">Solicitar demo</Link>
           </Button>
           <Button asChild variant="default" size="sm" className="h-9 px-4">
             <Link href="/intranet/login">
-              <Lock className="h-3.5 w-3.5 text-[#0F9D8A]" />
+              <Lock className="h-3.5 w-3.5 text-[#159F91]" />
               Acceso Intranet
             </Link>
           </Button>
@@ -85,7 +91,7 @@ export function PublicNavbar() {
                   className={cn(
                     "rounded-md px-3 py-2.5 text-sm font-medium",
                     isActive
-                      ? "bg-[#EBF7F5] text-[#0B7A6B]"
+                      ? "border-l-2 border-[#D99A55] bg-[#FDF6EC] text-[#0D1B2A]"
                       : "text-slate-600 hover:bg-slate-50 hover:text-[#0D1B2A]"
                   )}
                 >
@@ -96,7 +102,7 @@ export function PublicNavbar() {
             <div className="flex flex-col gap-2 pt-3">
               <Button
                 asChild
-                variant="brand"
+                variant="amber"
                 className="w-full"
                 onClick={() => setMobileOpen(false)}
               >
@@ -109,7 +115,7 @@ export function PublicNavbar() {
                 onClick={() => setMobileOpen(false)}
               >
                 <Link href="/intranet/login">
-                  <Lock className="h-4 w-4 text-[#0F9D8A]" />
+                  <Lock className="h-4 w-4 text-[#159F91]" />
                   Acceso Intranet
                 </Link>
               </Button>

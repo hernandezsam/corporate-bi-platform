@@ -4,22 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F9D8A]/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#159F91]/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
           "bg-[#0D1B2A] text-white shadow-sm hover:bg-[#162A3E] active:bg-[#09131E]",
         brand:
-          "bg-[#0F9D8A] text-white shadow-sm hover:bg-[#0B7A6B] active:bg-[#096458]",
+          "bg-[#159F91] text-white shadow-sm hover:bg-[#0F7E73] active:bg-[#0B665D]",
+        amber:
+          "bg-[#D99A55] text-[#0D1B2A] font-semibold shadow-sm hover:bg-[#C78742] active:bg-[#B57735]",
         destructive:
           "bg-red-600 text-white shadow-sm hover:bg-red-700",
         outline:
-          "border border-slate-200 bg-white text-[#0D1B2A] shadow-sm hover:bg-slate-50 hover:text-[#0D1B2A]",
+          "border border-slate-200 bg-white text-[#0D1B2A] shadow-sm hover:border-[#D99A55]/60 hover:bg-slate-50 hover:text-[#0D1B2A]",
         secondary:
           "bg-slate-100 text-[#0D1B2A] hover:bg-slate-200/80",
         ghost: "text-slate-700 hover:bg-slate-100 hover:text-[#0D1B2A]",
-        link: "text-[#0F9D8A] underline-offset-4 hover:underline",
+        link: "text-[#159F91] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2",

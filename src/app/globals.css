@@ -35,7 +35,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased selection:bg-[#0F9D8A] selection:text-white;
+    @apply bg-background text-foreground antialiased selection:bg-[#D99A55]/30 selection:text-[#0D1B2A];
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }

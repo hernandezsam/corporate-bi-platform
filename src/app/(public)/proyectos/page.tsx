@@ -16,11 +16,12 @@ export default function PlanesPage() {
     <div className="flex flex-col">
       <section className="bg-[#0D1B2A] bg-dark-grid py-16 text-white lg:py-20">
         <div className="container max-w-4xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0F9D8A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#159F91]">
             {siteConfig.pricing.eyebrow}
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {siteConfig.pricing.title}
+            Un servicio simple,{" "}
+            <span className="text-[#D99A55]">sin licencias</span> que comprar
           </h1>
           <p className="text-base leading-relaxed text-slate-300">
             Arriendo mensual transparente con implementación en 5 semanas, datos
@@ -37,7 +38,7 @@ export default function PlanesPage() {
               <p className="text-sm font-medium text-slate-300">
                 {siteConfig.pricing.planName}
               </p>
-              <p className="mt-4 text-3xl font-bold tracking-tight text-[#0F9D8A]">
+              <p className="mt-4 text-3xl font-bold tracking-tight text-[#D99A55]">
                 {siteConfig.pricing.headline}
               </p>
               <p className="mt-2 text-sm text-slate-300">
@@ -47,14 +48,14 @@ export default function PlanesPage() {
               <ul className="mt-7 space-y-3 border-t border-white/10 pt-6 text-sm text-slate-200">
                 {siteConfig.pricing.included.map((item) => (
                   <li key={item} className="flex items-center gap-2.5">
-                    <Check className="h-4 w-4 shrink-0 text-[#0F9D8A]" />
+                    <Check className="h-4 w-4 shrink-0 text-[#159F91]" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
 
               <div className="mt-8">
-                <Button asChild variant="brand" size="lg" className="w-full">
+                <Button asChild variant="amber" size="lg" className="w-full">
                   <Link href="/contacto">
                     Solicitar propuesta y demo gratuita
                     <ArrowRight className="h-4 w-4" />

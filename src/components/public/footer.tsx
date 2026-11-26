@@ -18,9 +18,9 @@ export function PublicFooter() {
             <div className="pt-2">
               <Link
                 href="/intranet/login"
-                className="inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-md border border-[#D99A55]/30 bg-white/5 px-3.5 py-2 text-xs font-medium text-white transition-colors hover:border-[#D99A55]/60 hover:bg-white/10"
               >
-                <Lock className="h-3.5 w-3.5 text-[#0F9D8A]" />
+                <Lock className="h-3.5 w-3.5 text-[#D99A55]" />
                 Acceso Intranet Findex
               </Link>
             </div>

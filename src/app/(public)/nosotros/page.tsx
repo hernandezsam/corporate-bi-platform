@@ -17,11 +17,12 @@ export default function NosotrosPage() {
     <div className="flex flex-col">
       <section className="bg-[#0D1B2A] bg-dark-grid py-16 text-white lg:py-20">
         <div className="container max-w-4xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0F9D8A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#159F91]">
             {siteConfig.team.eyebrow} · {siteConfig.security.eyebrow}
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {siteConfig.team.title}
+            Gestión, tecnología y contabilidad en{" "}
+            <span className="text-[#D99A55]">un mismo equipo</span>
           </h1>
           <p className="text-base leading-relaxed text-slate-300">
             {siteConfig.team.lead}
@@ -111,7 +112,7 @@ export default function NosotrosPage() {
                 {siteConfig.nextStep.subtitle}
               </p>
             </div>
-            <Button asChild variant="brand">
+            <Button asChild variant="amber">
               <Link href="/contacto">
                 Solicitar demo sin costo
                 <ArrowRight className="h-4 w-4" />

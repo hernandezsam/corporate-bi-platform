@@ -21,12 +21,13 @@ export default function IntranetLoginPage() {
         <BrandLogo variant="light" showTagline size="md" />
 
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#0F9D8A]/30 bg-[#0F9D8A]/10 px-3 py-1 text-xs font-medium text-[#0F9D8A]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#D99A55]/35 bg-[#D99A55]/10 px-3 py-1 text-xs font-medium text-[#D99A55]">
             <ShieldCheck className="h-3.5 w-3.5" />
             Intranet Findex · Datos en Chile
           </div>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white">
-            Claridad financiera, cada semana
+            Claridad financiera,{" "}
+            <span className="text-[#D99A55]">cada semana</span>
           </h2>
           <p className="text-sm leading-relaxed text-slate-300">
             Acceda a sus módulos de estados financieros, indicadores, personal,

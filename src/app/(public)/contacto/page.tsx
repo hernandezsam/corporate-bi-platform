@@ -21,11 +21,11 @@ export default function ContactoPage() {
     <div className="flex flex-col">
       <section className="bg-[#0D1B2A] bg-dark-grid py-16 text-white lg:py-20">
         <div className="container max-w-4xl space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0F9D8A]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#159F91]">
             {siteConfig.nextStep.eyebrow}
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {siteConfig.nextStep.title}
+            Veamos <span className="text-[#D99A55]">sus números</span>
           </h1>
           <p className="text-base leading-relaxed text-slate-300">
             {siteConfig.nextStep.subtitle}

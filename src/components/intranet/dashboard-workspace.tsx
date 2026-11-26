@@ -118,8 +118,8 @@ export function DashboardWorkspace({
               className={cn(
                 "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                 selectedCategory === cat
-                  ? "border-slate-900 bg-slate-900 text-white"
-                  : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  ? "border-[#D99A55] bg-[#0D1B2A] text-[#F6D3A5]"
+                  : "border-slate-200 bg-slate-50 text-slate-600 hover:border-[#D99A55]/50 hover:bg-slate-100 hover:text-slate-900"
               )}
             >
               {cat}
