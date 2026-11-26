@@ -49,13 +49,6 @@ export default function ContactoPage() {
                 <div className="flex items-start gap-2.5">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
                   <span>
-                    Módulo de estados financieros armado con cifras reales de su
-                    empresa.
-                  </span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
-                  <span>
                     Recorrido por los 5 módulos e informe mensual generado con
                     IA.
                   </span>
@@ -63,7 +56,7 @@ export default function ContactoPage() {
                 <div className="flex items-start gap-2.5">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0F9D8A]" />
                   <span>
-                    Plan de implementación en 5 semanas adaptado a su Softland.
+                    Plan de implementación en 5 semanas adaptado a su ERP.
                   </span>
                 </div>
               </CardContent>
