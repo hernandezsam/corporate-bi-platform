@@ -4,13 +4,17 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle,
-  BarChart3,
   CheckCircle2,
+  LayoutGrid,
   Loader2,
   Search,
   Users,
 } from "lucide-react";
-import type { Profile, Report } from "@/types/database";
+import type { Profile } from "@/types/database";
+import {
+  MODULE_TYPE_LABELS,
+  type CorporateModule,
+} from "@/types/modules";
 import { getIconByName } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,18 +33,18 @@ import { Alert } from "@/components/ui/alert";
 
 interface AssignmentRow {
   user_id: string;
-  report_id: string;
+  module_id: string;
 }
 
 interface AssignmentsManagerProps {
   users: Profile[];
-  reports: Report[];
+  modules: CorporateModule[];
   initialAssignments: AssignmentRow[];
 }
 
 export function AssignmentsManager({
   users,
-  reports,
+  modules,
   initialAssignments,
 }: AssignmentsManagerProps) {
   const router = useRouter();
@@ -49,11 +53,11 @@ export function AssignmentsManager({
   const [selectedUserId, setSelectedUserId] = useState<string>(
     users[0]?.id ?? ""
   );
-  const [selectedReportId, setSelectedReportId] = useState<string>(
-    reports[0]?.id ?? ""
+  const [selectedModuleId, setSelectedModuleId] = useState<string>(
+    modules[0]?.id ?? ""
   );
   const [userSearch, setUserSearch] = useState("");
-  const [reportSearch, setReportSearch] = useState("");
+  const [moduleSearch, setModuleSearch] = useState("");
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{
     type: "success" | "error";
@@ -63,7 +67,7 @@ export function AssignmentsManager({
   const assignmentSet = useMemo(() => {
     const set = new Set<string>();
     for (const a of assignments) {
-      set.add(`${a.user_id}:${a.report_id}`);
+      set.add(`${a.user_id}:${a.module_id}`);
     }
     return set;
   }, [assignments]);
@@ -76,10 +80,10 @@ export function AssignmentsManager({
     return map;
   }, [assignments]);
 
-  const reportCounts = useMemo(() => {
+  const moduleCounts = useMemo(() => {
     const map = new Map<string, number>();
     for (const a of assignments) {
-      map.set(a.report_id, (map.get(a.report_id) ?? 0) + 1);
+      map.set(a.module_id, (map.get(a.module_id) ?? 0) + 1);
     }
     return map;
   }, [assignments]);
@@ -94,55 +98,56 @@ export function AssignmentsManager({
     );
   }, [users, userSearch]);
 
-  const filteredReports = useMemo(() => {
-    const term = reportSearch.trim().toLowerCase();
-    if (!term) return reports;
-    return reports.filter(
-      (r) =>
-        r.name.toLowerCase().includes(term) ||
-        (r.category || "").toLowerCase().includes(term)
+  const filteredModules = useMemo(() => {
+    const term = moduleSearch.trim().toLowerCase();
+    if (!term) return modules;
+    return modules.filter(
+      (m) =>
+        m.name.toLowerCase().includes(term) ||
+        (m.category || "").toLowerCase().includes(term) ||
+        MODULE_TYPE_LABELS[m.module_type].toLowerCase().includes(term)
     );
-  }, [reports, reportSearch]);
+  }, [modules, moduleSearch]);
 
-  const groupedReports = useMemo(() => {
-    const groups = new Map<string, Report[]>();
-    for (const r of reports) {
-      const cat = r.category || "General";
+  const groupedModules = useMemo(() => {
+    const groups = new Map<string, CorporateModule[]>();
+    for (const m of modules) {
+      const cat = m.category || "General";
       const list = groups.get(cat) ?? [];
-      list.push(r);
+      list.push(m);
       groups.set(cat, list);
     }
     return Array.from(groups.entries());
-  }, [reports]);
+  }, [modules]);
 
   const selectedUser = users.find((u) => u.id === selectedUserId) ?? null;
-  const selectedReport = reports.find((r) => r.id === selectedReportId) ?? null;
+  const selectedModule = modules.find((m) => m.id === selectedModuleId) ?? null;
 
   async function toggleAssignment(
     userId: string,
-    reportId: string,
+    moduleId: string,
     nextAssigned: boolean
   ) {
-    const key = `${userId}:${reportId}`;
+    const key = `${userId}:${moduleId}`;
     setBusyKey(key);
     setFeedback(null);
 
     const previous = assignments;
     setAssignments((prev) =>
       nextAssigned
-        ? [...prev, { user_id: userId, report_id: reportId }]
+        ? [...prev, { user_id: userId, module_id: moduleId }]
         : prev.filter(
-            (a) => !(a.user_id === userId && a.report_id === reportId)
+            (a) => !(a.user_id === userId && a.module_id === moduleId)
           )
     );
 
     try {
-      const res = await fetch("/api/admin/assignments", {
+      const res = await fetch("/api/admin/module-assignments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: userId,
-          report_id: reportId,
+          module_id: moduleId,
           assigned: nextAssigned,
         }),
       });
@@ -164,26 +169,26 @@ export function AssignmentsManager({
     }
   }
 
-  async function setAllReportsForUser(userId: string, assignAll: boolean) {
+  async function setAllModulesForUser(userId: string, assignAll: boolean) {
     setBusyKey(`bulk:${userId}`);
     setFeedback(null);
     const previous = assignments;
-    const reportIds = assignAll ? reports.map((r) => r.id) : [];
+    const moduleIds = assignAll ? modules.map((m) => m.id) : [];
 
     setAssignments((prev) => {
       const others = prev.filter((a) => a.user_id !== userId);
-      const next = reportIds.map((rid) => ({
+      const next = moduleIds.map((mid) => ({
         user_id: userId,
-        report_id: rid,
+        module_id: mid,
       }));
       return [...others, ...next];
     });
 
     try {
-      const res = await fetch("/api/admin/assignments", {
+      const res = await fetch("/api/admin/module-assignments", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId, report_ids: reportIds }),
+        body: JSON.stringify({ user_id: userId, module_ids: moduleIds }),
       });
       if (!res.ok) {
         setAssignments(previous);
@@ -196,7 +201,7 @@ export function AssignmentsManager({
       setFeedback({
         type: "success",
         text: assignAll
-          ? "Todos los informes fueron asignados."
+          ? "Todos los módulos fueron asignados."
           : "Todas las asignaciones del usuario fueron revocadas.",
       });
       router.refresh();
@@ -212,12 +217,12 @@ export function AssignmentsManager({
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
-          Asignación de Informes
+          Asignación de Módulos
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Gestione qué informes puede visualizar cada usuario o consulte quiénes
-          tienen acceso a cada informe. Los cambios se persisten al instante en
-          Supabase.
+          Gestione qué informes Power BI, aplicaciones, documentos PDF y
+          herramientas puede abrir cada usuario. Los cambios se persisten al
+          instante en Supabase.
         </p>
       </div>
 
@@ -238,9 +243,9 @@ export function AssignmentsManager({
             <Users className="h-3.5 w-3.5" />
             Asignar por Usuario
           </TabsTrigger>
-          <TabsTrigger value="by-report" className="gap-1.5">
-            <BarChart3 className="h-3.5 w-3.5" />
-            Consultar por Informe
+          <TabsTrigger value="by-module" className="gap-1.5">
+            <LayoutGrid className="h-3.5 w-3.5" />
+            Consultar por Módulo
           </TabsTrigger>
         </TabsList>
 
@@ -275,7 +280,7 @@ export function AssignmentsManager({
                       className={cn(
                         "flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left transition-colors",
                         selected
-                          ? "border-slate-900 bg-slate-900 text-white"
+                          ? "border-[#0D1B2A] bg-[#0D1B2A] text-white"
                           : "border-transparent hover:bg-slate-100 text-slate-900"
                       )}
                     >
@@ -315,8 +320,8 @@ export function AssignmentsManager({
                       <CardTitle>{selectedUser.full_name}</CardTitle>
                       <CardDescription>
                         {selectedUser.email} · Rol: {selectedUser.role} ·{" "}
-                        {userCounts.get(selectedUser.id) ?? 0} de {reports.length}{" "}
-                        informes asignados
+                        {userCounts.get(selectedUser.id) ?? 0} de{" "}
+                        {modules.length} módulos asignados
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
@@ -325,7 +330,7 @@ export function AssignmentsManager({
                         variant="outline"
                         disabled={busyKey === `bulk:${selectedUser.id}`}
                         onClick={() =>
-                          setAllReportsForUser(selectedUser.id, true)
+                          setAllModulesForUser(selectedUser.id, true)
                         }
                       >
                         Asignar todos
@@ -335,7 +340,7 @@ export function AssignmentsManager({
                         variant="ghost"
                         disabled={busyKey === `bulk:${selectedUser.id}`}
                         onClick={() =>
-                          setAllReportsForUser(selectedUser.id, false)
+                          setAllModulesForUser(selectedUser.id, false)
                         }
                       >
                         Quitar todos
@@ -343,15 +348,15 @@ export function AssignmentsManager({
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-5 pt-5">
-                    {groupedReports.map(([category, items]) => (
+                    {groupedModules.map(([category, items]) => (
                       <div key={category} className="space-y-2">
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                           {category}
                         </p>
                         <div className="grid gap-2 sm:grid-cols-2">
-                          {items.map((report) => {
-                            const Icon = getIconByName(report.icon);
-                            const key = `${selectedUser.id}:${report.id}`;
+                          {items.map((mod) => {
+                            const Icon = getIconByName(mod.icon);
+                            const key = `${selectedUser.id}:${mod.id}`;
                             const checked = assignmentSet.has(key);
                             const busy =
                               busyKey === key ||
@@ -359,11 +364,11 @@ export function AssignmentsManager({
 
                             return (
                               <label
-                                key={report.id}
+                                key={mod.id}
                                 className={cn(
                                   "flex cursor-pointer items-center justify-between gap-2.5 rounded-lg border px-3 py-2.5 transition-colors",
                                   checked
-                                    ? "border-blue-200 bg-blue-50/40"
+                                    ? "border-[#159F91]/40 bg-[#EBF7F5]/60"
                                     : "border-slate-200 bg-white hover:bg-slate-50"
                                 )}
                               >
@@ -374,18 +379,23 @@ export function AssignmentsManager({
                                     onCheckedChange={(val) =>
                                       toggleAssignment(
                                         selectedUser.id,
-                                        report.id,
+                                        mod.id,
                                         Boolean(val)
                                       )
                                     }
                                   />
                                   <Icon className="h-4 w-4 shrink-0 text-slate-500" />
-                                  <span className="truncate text-sm font-medium text-slate-800">
-                                    {report.name}
-                                  </span>
+                                  <div className="min-w-0">
+                                    <p className="truncate text-sm font-medium text-slate-800">
+                                      {mod.name}
+                                    </p>
+                                    <p className="text-[10px] text-slate-500">
+                                      {MODULE_TYPE_LABELS[mod.module_type]}
+                                    </p>
+                                  </div>
                                 </div>
                                 {busy && (
-                                  <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-blue-600" />
+                                  <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[#159F91]" />
                                 )}
                               </label>
                             );
@@ -404,44 +414,44 @@ export function AssignmentsManager({
           </div>
         </TabsContent>
 
-        {/* VISTA 2: POR INFORME */}
-        <TabsContent value="by-report">
+        {/* VISTA 2: POR MÓDULO */}
+        <TabsContent value="by-module">
           <div className="grid gap-6 lg:grid-cols-12">
             <Card className="lg:col-span-4">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">
-                  Seleccionar Informe ({reports.length})
+                  Seleccionar Módulo ({modules.length})
                 </CardTitle>
                 <div className="relative pt-2">
                   <Search className="pointer-events-none absolute left-3 top-[18px] h-4 w-4 text-slate-400" />
                   <Input
                     type="search"
-                    placeholder="Buscar informe..."
+                    placeholder="Buscar módulo..."
                     className="pl-9"
-                    value={reportSearch}
-                    onChange={(e) => setReportSearch(e.target.value)}
+                    value={moduleSearch}
+                    onChange={(e) => setModuleSearch(e.target.value)}
                   />
                 </div>
               </CardHeader>
               <CardContent className="max-h-[540px] space-y-1.5 overflow-y-auto pt-0">
-                {filteredReports.map((report) => {
-                  const selected = report.id === selectedReportId;
-                  const count = reportCounts.get(report.id) ?? 0;
+                {filteredModules.map((mod) => {
+                  const selected = mod.id === selectedModuleId;
+                  const count = moduleCounts.get(mod.id) ?? 0;
                   return (
                     <button
-                      key={report.id}
+                      key={mod.id}
                       type="button"
-                      onClick={() => setSelectedReportId(report.id)}
+                      onClick={() => setSelectedModuleId(mod.id)}
                       className={cn(
                         "flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left transition-colors",
                         selected
-                          ? "border-slate-900 bg-slate-900 text-white"
+                          ? "border-[#0D1B2A] bg-[#0D1B2A] text-white"
                           : "border-transparent hover:bg-slate-100 text-slate-900"
                       )}
                     >
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium">
-                          {report.name}
+                          {mod.name}
                         </p>
                         <p
                           className={cn(
@@ -449,7 +459,7 @@ export function AssignmentsManager({
                             selected ? "text-slate-300" : "text-slate-500"
                           )}
                         >
-                          {report.category}
+                          {MODULE_TYPE_LABELS[mod.module_type]} · {mod.category}
                         </p>
                       </div>
                       <Badge
@@ -468,19 +478,24 @@ export function AssignmentsManager({
             </Card>
 
             <Card className="lg:col-span-8">
-              {selectedReport ? (
+              {selectedModule ? (
                 <>
                   <CardHeader className="border-b border-slate-100">
-                    <CardTitle>{selectedReport.name}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CardTitle>{selectedModule.name}</CardTitle>
+                      <Badge variant="outline" className="text-[10px]">
+                        {MODULE_TYPE_LABELS[selectedModule.module_type]}
+                      </Badge>
+                    </div>
                     <CardDescription>
-                      Categoría: {selectedReport.category} ·{" "}
-                      {reportCounts.get(selectedReport.id) ?? 0} usuarios con
+                      Categoría: {selectedModule.category} ·{" "}
+                      {moduleCounts.get(selectedModule.id) ?? 0} usuarios con
                       acceso explícito
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2 pt-5">
                     {users.map((user) => {
-                      const key = `${user.id}:${selectedReport.id}`;
+                      const key = `${user.id}:${selectedModule.id}`;
                       const checked = assignmentSet.has(key);
                       const busy = busyKey === key;
 
@@ -490,7 +505,7 @@ export function AssignmentsManager({
                           className={cn(
                             "flex cursor-pointer items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 transition-colors",
                             checked
-                              ? "border-blue-200 bg-blue-50/40"
+                              ? "border-[#159F91]/40 bg-[#EBF7F5]/60"
                               : "border-slate-200 bg-white hover:bg-slate-50"
                           )}
                         >
@@ -501,7 +516,7 @@ export function AssignmentsManager({
                               onCheckedChange={(val) =>
                                 toggleAssignment(
                                   user.id,
-                                  selectedReport.id,
+                                  selectedModule.id,
                                   Boolean(val)
                                 )
                               }
@@ -533,7 +548,7 @@ export function AssignmentsManager({
                               </Badge>
                             )}
                             {busy && (
-                              <Loader2 className="h-3.5 w-3.5 animate-spin text-blue-600" />
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#159F91]" />
                             )}
                           </div>
                         </label>
@@ -543,7 +558,7 @@ export function AssignmentsManager({
                 </>
               ) : (
                 <CardContent className="py-12 text-center text-sm text-slate-500">
-                  No existen informes registrados.
+                  No existen módulos registrados.
                 </CardContent>
               )}
             </Card>

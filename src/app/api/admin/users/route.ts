@@ -12,11 +12,13 @@ export async function GET() {
 
   try {
     const admin = createAdminSupabaseClient();
-    const [{ data: profiles, error: pErr }, { data: assignments, error: aErr }] =
-      await Promise.all([
-        admin.from("profiles").select("*").order("created_at", { ascending: false }),
-        admin.from("user_reports").select("user_id, report_id"),
-      ]);
+    const [
+      { data: profiles, error: pErr },
+      { data: assignments, error: aErr },
+    ] = await Promise.all([
+      admin.from("profiles").select("*").order("created_at", { ascending: false }),
+      admin.from("user_modules").select("user_id, module_id"),
+    ]);
 
     if (pErr || aErr) {
       return NextResponse.json(
@@ -28,7 +30,7 @@ export async function GET() {
     const map = new Map<string, string[]>();
     for (const row of assignments ?? []) {
       const list = map.get(row.user_id) ?? [];
-      list.push(row.report_id);
+      list.push(row.module_id);
       map.set(row.user_id, list);
     }
 
@@ -36,6 +38,8 @@ export async function GET() {
       const ids = map.get(p.id) ?? [];
       return {
         ...p,
+        assigned_module_ids: ids,
+        assigned_modules_count: ids.length,
         assigned_report_ids: ids,
         assigned_reports_count: ids.length,
       };
@@ -65,7 +69,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const { full_name, email, password, role, active, report_ids } = parsed.data;
+    const { full_name, email, password, role, active, report_ids, module_ids } =
+      parsed.data;
+    const initialModuleIds =
+      module_ids && module_ids.length > 0 ? module_ids : report_ids;
     const admin = createAdminSupabaseClient();
 
     // 1. Crear usuario en Supabase Auth mediante API administrativa segura
@@ -112,16 +119,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Asignar informes iniciales si se seleccionaron
-    if (report_ids.length > 0) {
-      const rows = report_ids.map((reportId) => ({
+    // 3. Asignar módulos iniciales si se seleccionaron
+    if (initialModuleIds.length > 0) {
+      const rows = initialModuleIds.map((moduleId) => ({
         user_id: userId,
-        report_id: reportId,
+        module_id: moduleId,
         assigned_by: auth.session.userId,
       }));
       await admin
-        .from("user_reports")
-        .upsert(rows, { onConflict: "user_id,report_id" });
+        .from("user_modules")
+        .upsert(rows, { onConflict: "user_id,module_id" });
     }
 
     await logAdminAction({
@@ -130,15 +137,22 @@ export async function POST(request: Request) {
       action: "user.create",
       targetType: "user",
       targetId: userId,
-      metadata: { email, role, active, reports_count: report_ids.length },
+      metadata: {
+        email,
+        role,
+        active,
+        modules_count: initialModuleIds.length,
+      },
     });
 
     return NextResponse.json(
       {
         user: {
           ...profile,
-          assigned_report_ids: report_ids,
-          assigned_reports_count: report_ids.length,
+          assigned_module_ids: initialModuleIds,
+          assigned_modules_count: initialModuleIds.length,
+          assigned_report_ids: initialModuleIds,
+          assigned_reports_count: initialModuleIds.length,
         },
       },
       { status: 201 }

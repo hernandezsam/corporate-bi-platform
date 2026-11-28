@@ -5,7 +5,7 @@ export interface AuditLogInput {
   actorId: string;
   actorEmail?: string;
   action: string;
-  targetType: "user" | "report" | "category" | "assignment";
+  targetType: "user" | "report" | "module" | "category" | "assignment";
   targetId?: string | null;
   metadata?: Record<string, unknown>;
 }

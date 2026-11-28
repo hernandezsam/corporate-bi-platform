@@ -34,3 +34,11 @@ services:
         sync: false
       - key: RESEND_FROM_EMAIL
         value: "Findex <onboarding@resend.dev>"
+      - key: ALLOWED_HTML_APP_HOSTS
+        sync: false
+      - key: NEXT_PUBLIC_ALLOWED_HTML_HOSTS
+        sync: false
+      - key: ALLOWED_DOCUMENT_HOSTS
+        sync: false
+      - key: NEXT_PUBLIC_ALLOWED_DOCUMENT_HOSTS
+        sync: false

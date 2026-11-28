@@ -3,8 +3,10 @@
 Plataforma web empresarial lista para producción compuesta por:
 
 1. **Sitio web corporativo público** (responsive, identidad configurable mediante placeholders en un único archivo).
-2. **Intranet privada de informes Power BI** con autenticación obligatoria mediante Supabase Auth y visualización embebida responsiva.
-3. **Panel de administración completo** (protegido en frontend, middleware, API server y PostgreSQL RLS) para gestionar usuarios, informes, categorías y asignaciones granulares usuario ↔ informe.
+2. **Intranet privada modular** (Motor Universal de Módulos Corporativos) con autenticación obligatoria mediante Supabase Auth, catálogo con búsqueda/filtros/favoritos y visores seguros para **Power BI**, **Aplicaciones React nativas (`APP`)**, **Herramientas (`TOOL`)**, **Apps HTML externas con sandbox (`HTML`)** y **Documentos PDF (`PDF`)**.
+3. **Panel de administración completo** (protegido en frontend, middleware, API server y PostgreSQL RLS) para gestionar usuarios, módulos (`/admin/modulos`), categorías y asignaciones granulares usuario ↔ módulo.
+
+> Ver documentación detallada de arquitectura, incorporación de futuras apps independientes y rollback en [`docs/MOTOR_MODULOS_UNIVERSALES.md`](docs/MOTOR_MODULOS_UNIVERSALES.md).
 
 ---
 

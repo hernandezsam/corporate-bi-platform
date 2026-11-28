@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
-const extraFrameHosts = (process.env.NEXT_PUBLIC_EXTRA_FRAME_HOSTS || "")
+const extraFrameHosts = [
+  process.env.NEXT_PUBLIC_EXTRA_FRAME_HOSTS || "",
+  process.env.NEXT_PUBLIC_ALLOWED_HTML_HOSTS || "",
+  process.env.NEXT_PUBLIC_ALLOWED_DOCUMENT_HOSTS || "",
+]
+  .join(" ")
   .split(/[\s,]+/)
   .map((h) => h.trim())
   .filter(Boolean)
@@ -14,7 +19,7 @@ const cspHeader = [
   "img-src 'self' data: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
-  `frame-src 'self' https://app.powerbi.com https://*.powerbi.com https://*.analysis.windows.net https://*.fabric.microsoft.com ${extraFrameHosts}`.trim(),
+  `frame-src 'self' https://app.powerbi.com https://*.powerbi.com https://*.analysis.windows.net https://*.fabric.microsoft.com https://*.supabase.co ${extraFrameHosts}`.trim(),
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",

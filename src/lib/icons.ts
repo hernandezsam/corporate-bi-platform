@@ -3,17 +3,21 @@ import {
   BarChart3,
   Briefcase,
   Building2,
+  Calculator,
   Clock,
+  Code2,
   Cpu,
   Database,
   DollarSign,
   FileBarChart,
   FileSpreadsheet,
+  FileText,
   Folder,
   FolderKanban,
   Globe,
   Landmark,
   Layers,
+  LayoutGrid,
   LineChart,
   PieChart,
   ShieldCheck,
@@ -21,19 +25,23 @@ import {
   UserCheck,
   Users,
   Wallet,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
 export const ICON_MAP: Record<string, LucideIcon> = {
+  LayoutGrid,
   BarChart3,
   LineChart,
   PieChart,
   FileBarChart,
   FileSpreadsheet,
+  FileText,
   TrendingUp,
   Landmark,
   Wallet,
   DollarSign,
+  Calculator,
   Briefcase,
   FolderKanban,
   Folder,
@@ -42,16 +50,18 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   Clock,
   Activity,
   Building2,
+  Code2,
   Cpu,
   Database,
   Globe,
   Layers,
   ShieldCheck,
+  Wrench,
 };
 
 export const AVAILABLE_ICONS = Object.keys(ICON_MAP);
 
 export function getIconByName(name?: string | null): LucideIcon {
-  if (!name) return BarChart3;
-  return ICON_MAP[name] ?? BarChart3;
+  if (!name) return LayoutGrid;
+  return ICON_MAP[name] ?? LayoutGrid;
 }

@@ -2,34 +2,35 @@ import type { Metadata } from "next";
 import { requireAdminUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { AssignmentsManager } from "@/components/admin/assignments-manager";
-import type { Profile, Report } from "@/types/database";
+import type { Profile } from "@/types/database";
+import type { CorporateModule } from "@/types/modules";
 
 export const metadata: Metadata = {
-  title: "Asignaciones de Informes",
+  title: "Asignaciones de Módulos",
 };
 
 export default async function AdminAsignacionesPage() {
   await requireAdminUser();
   const supabase = await createServerSupabaseClient();
 
-  const [{ data: users }, { data: reports }, { data: assignments }] =
+  const [{ data: users }, { data: modules }, { data: assignments }] =
     await Promise.all([
       supabase
         .from("profiles")
         .select("*")
         .order("full_name", { ascending: true }),
       supabase
-        .from("reports")
+        .from("modules")
         .select("*")
         .order("sort_order", { ascending: true })
         .order("name", { ascending: true }),
-      supabase.from("user_reports").select("user_id, report_id"),
+      supabase.from("user_modules").select("user_id, module_id"),
     ]);
 
   return (
     <AssignmentsManager
       users={(users as Profile[]) ?? []}
-      reports={(reports as Report[]) ?? []}
+      modules={(modules as CorporateModule[]) ?? []}
       initialAssignments={assignments ?? []}
     />
   );

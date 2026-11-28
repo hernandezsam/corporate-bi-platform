@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.audit_logs (
   actor_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   actor_email TEXT,
   action TEXT NOT NULL,
-  target_type TEXT NOT NULL CHECK (target_type IN ('user', 'report', 'category', 'assignment')),
+  target_type TEXT NOT NULL CHECK (target_type IN ('user', 'report', 'module', 'category', 'assignment')),
   target_id TEXT,
   metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()

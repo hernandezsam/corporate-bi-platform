@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { requireActiveUser } from "@/lib/auth";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { getAuthorizedCatalogModules } from "@/services/modules.service";
 import { DashboardWorkspace } from "@/components/intranet/dashboard-workspace";
-import type { Report } from "@/types/database";
 
 export const metadata: Metadata = {
-  title: "Dashboard de Informes",
+  title: "Catálogo de Módulos",
 };
 
 interface DashboardPageProps {
@@ -17,19 +16,13 @@ export default async function IntranetDashboardPage({
 }: DashboardPageProps) {
   const { profile } = await requireActiveUser();
   const params = await searchParams;
-  const supabase = await createServerSupabaseClient();
 
-  const { data: reports } = await supabase
-    .from("reports")
-    .select("*")
-    .eq("active", true)
-    .order("sort_order", { ascending: true })
-    .order("name", { ascending: true });
+  const modules = await getAuthorizedCatalogModules(profile.id);
 
   return (
     <DashboardWorkspace
       profile={profile}
-      reports={(reports as Report[]) ?? []}
+      initialModules={modules}
       forbiddenNotice={params.error === "forbidden"}
     />
   );

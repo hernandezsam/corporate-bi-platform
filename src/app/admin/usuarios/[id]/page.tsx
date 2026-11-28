@@ -3,7 +3,8 @@ import { z } from "zod";
 import { requireAdminUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { UserDetailEditor } from "@/components/admin/user-detail-editor";
-import type { Profile, Report } from "@/types/database";
+import type { Profile } from "@/types/database";
+import type { CorporateModule } from "@/types/modules";
 
 const uuidSchema = z.string().uuid();
 
@@ -22,15 +23,15 @@ export default async function AdminUsuarioDetailPage({
   }
 
   const supabase = await createServerSupabaseClient();
-  const [{ data: profile }, { data: reports }, { data: assignments }] =
+  const [{ data: profile }, { data: modules }, { data: assignments }] =
     await Promise.all([
       supabase.from("profiles").select("*").eq("id", id).maybeSingle(),
       supabase
-        .from("reports")
+        .from("modules")
         .select("*")
         .order("sort_order", { ascending: true })
         .order("name", { ascending: true }),
-      supabase.from("user_reports").select("report_id").eq("user_id", id),
+      supabase.from("user_modules").select("module_id").eq("user_id", id),
     ]);
 
   if (!profile) {
@@ -40,8 +41,8 @@ export default async function AdminUsuarioDetailPage({
   return (
     <UserDetailEditor
       user={profile as Profile}
-      reports={(reports as Report[]) ?? []}
-      initialAssignedReportIds={(assignments ?? []).map((a) => a.report_id)}
+      modules={(modules as CorporateModule[]) ?? []}
+      initialAssignedModuleIds={(assignments ?? []).map((a) => a.module_id)}
       currentAdminId={currentAdminId}
     />
   );

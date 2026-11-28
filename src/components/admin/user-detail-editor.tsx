@@ -11,7 +11,11 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
-import type { Profile, Report, UserRole } from "@/types/database";
+import type { Profile, UserRole } from "@/types/database";
+import {
+  MODULE_TYPE_LABELS,
+  type CorporateModule,
+} from "@/types/modules";
 import { getIconByName } from "@/lib/icons";
 import { formatDateTime } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -38,15 +42,15 @@ import {
 
 interface UserDetailEditorProps {
   user: Profile;
-  reports: Report[];
-  initialAssignedReportIds: string[];
+  modules: CorporateModule[];
+  initialAssignedModuleIds: string[];
   currentAdminId: string;
 }
 
 export function UserDetailEditor({
   user,
-  reports,
-  initialAssignedReportIds,
+  modules,
+  initialAssignedModuleIds,
   currentAdminId,
 }: UserDetailEditorProps) {
   const router = useRouter();
@@ -61,7 +65,7 @@ export function UserDetailEditor({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [assignedIds, setAssignedIds] = useState<string[]>(
-    initialAssignedReportIds
+    initialAssignedModuleIds
   );
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [bulkLoading, setBulkLoading] = useState(false);
@@ -70,16 +74,16 @@ export function UserDetailEditor({
     text: string;
   } | null>(null);
 
-  const groupedReports = useMemo(() => {
-    const groups = new Map<string, Report[]>();
-    for (const r of reports) {
-      const cat = r.category || "General";
+  const groupedModules = useMemo(() => {
+    const groups = new Map<string, CorporateModule[]>();
+    for (const m of modules) {
+      const cat = m.category || "General";
       const list = groups.get(cat) ?? [];
-      list.push(r);
+      list.push(m);
       groups.set(cat, list);
     }
     return Array.from(groups.entries());
-  }, [reports]);
+  }, [modules]);
 
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
@@ -112,21 +116,21 @@ export function UserDetailEditor({
     }
   }
 
-  async function handleToggleReport(reportId: string, nextAssigned: boolean) {
+  async function handleToggleModule(moduleId: string, nextAssigned: boolean) {
     setFeedback(null);
-    setTogglingId(reportId);
+    setTogglingId(moduleId);
     const previous = assignedIds;
     setAssignedIds((prev) =>
-      nextAssigned ? [...prev, reportId] : prev.filter((id) => id !== reportId)
+      nextAssigned ? [...prev, moduleId] : prev.filter((id) => id !== moduleId)
     );
 
     try {
-      const res = await fetch("/api/admin/assignments", {
+      const res = await fetch("/api/admin/module-assignments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: user.id,
-          report_id: reportId,
+          module_id: moduleId,
           assigned: nextAssigned,
         }),
       });
@@ -151,17 +155,17 @@ export function UserDetailEditor({
   async function handleBulkSet(selectAll: boolean) {
     setFeedback(null);
     setBulkLoading(true);
-    const targetIds = selectAll ? reports.map((r) => r.id) : [];
+    const targetIds = selectAll ? modules.map((m) => m.id) : [];
     const previous = assignedIds;
     setAssignedIds(targetIds);
 
     try {
-      const res = await fetch("/api/admin/assignments", {
+      const res = await fetch("/api/admin/module-assignments", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: user.id,
-          report_ids: targetIds,
+          module_ids: targetIds,
         }),
       });
       if (!res.ok) {
@@ -175,7 +179,7 @@ export function UserDetailEditor({
       setFeedback({
         type: "success",
         text: selectAll
-          ? "Todos los informes fueron asignados a este usuario."
+          ? "Todos los módulos fueron asignados a este usuario."
           : "Se revocaron todas las asignaciones de este usuario.",
       });
       router.refresh();
@@ -355,12 +359,12 @@ export function UserDetailEditor({
           </CardContent>
         </Card>
 
-        {/* Asignación de Informes */}
+        {/* Asignación de Módulos */}
         <Card className="lg:col-span-7">
           <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>
-                Informes asignados ({assignedIds.length} / {reports.length})
+                Módulos asignados ({assignedIds.length} / {modules.length})
               </CardTitle>
               <CardDescription>
                 Los cambios se guardan inmediatamente en Supabase.
@@ -371,7 +375,7 @@ export function UserDetailEditor({
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={bulkLoading || reports.length === 0}
+                disabled={bulkLoading || modules.length === 0}
                 onClick={() => handleBulkSet(true)}
               >
                 Asignar todos
@@ -388,32 +392,32 @@ export function UserDetailEditor({
             </div>
           </CardHeader>
           <CardContent className="space-y-5">
-            {reports.length === 0 ? (
+            {modules.length === 0 ? (
               <p className="text-sm text-slate-500">
-                No existen informes creados aún. Cree informes en el módulo{" "}
+                No existen módulos creados aún. Cree módulos en{" "}
                 <Link
-                  href="/admin/informes"
-                  className="font-medium text-blue-600 hover:underline"
+                  href="/admin/modulos"
+                  className="font-medium text-[#159F91] hover:underline"
                 >
-                  Gestión de Informes
+                  Gestión de Módulos
                 </Link>
                 .
               </p>
             ) : (
-              groupedReports.map(([category, items]) => (
+              groupedModules.map(([category, items]) => (
                 <div key={category} className="space-y-2.5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                     {category}
                   </p>
                   <div className="space-y-2">
-                    {items.map((report) => {
-                      const Icon = getIconByName(report.icon);
-                      const checked = assignedIds.includes(report.id);
-                      const busy = togglingId === report.id || bulkLoading;
+                    {items.map((mod) => {
+                      const Icon = getIconByName(mod.icon);
+                      const checked = assignedIds.includes(mod.id);
+                      const busy = togglingId === mod.id || bulkLoading;
 
                       return (
                         <label
-                          key={report.id}
+                          key={mod.id}
                           className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-200/80 bg-white px-3.5 py-2.5 transition-colors hover:bg-slate-50"
                         >
                           <div className="flex items-center gap-3 min-w-0">
@@ -421,29 +425,32 @@ export function UserDetailEditor({
                               checked={checked}
                               disabled={busy}
                               onCheckedChange={(val) =>
-                                handleToggleReport(report.id, Boolean(val))
+                                handleToggleModule(mod.id, Boolean(val))
                               }
                             />
                             <Icon className="h-4 w-4 shrink-0 text-slate-500" />
                             <div className="min-w-0">
                               <p className="truncate text-sm font-medium text-slate-900">
-                                {report.name}
+                                {mod.name}
                               </p>
-                              {report.description && (
+                              {mod.description && (
                                 <p className="truncate text-xs text-slate-500">
-                                  {report.description}
+                                  {mod.description}
                                 </p>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            {!report.active && (
+                            <Badge variant="outline" className="text-[10px]">
+                              {MODULE_TYPE_LABELS[mod.module_type]}
+                            </Badge>
+                            {!mod.active && (
                               <Badge variant="secondary" className="text-[10px]">
                                 Inactivo
                               </Badge>
                             )}
                             {busy && (
-                              <Loader2 className="h-3.5 w-3.5 animate-spin text-blue-600" />
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#159F91]" />
                             )}
                           </div>
                         </label>

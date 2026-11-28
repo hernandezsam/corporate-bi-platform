@@ -5,9 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  BarChart3,
   FolderTree,
   LayoutDashboard,
+  LayoutGrid,
   Link2,
   LogOut,
   Menu,
@@ -31,7 +31,7 @@ interface AdminShellProps {
 const ADMIN_NAV = [
   { label: "Resumen", href: "/admin", icon: LayoutDashboard, exact: true },
   { label: "Usuarios", href: "/admin/usuarios", icon: Users },
-  { label: "Gestión de Informes", href: "/admin/informes", icon: BarChart3 },
+  { label: "Módulos", href: "/admin/modulos", icon: LayoutGrid },
   { label: "Categorías", href: "/admin/categorias", icon: FolderTree },
   { label: "Asignaciones", href: "/admin/asignaciones", icon: Link2 },
 ];
@@ -155,7 +155,7 @@ export function AdminShell({ profile, children }: AdminShellProps) {
                 Administración
               </p>
               <p className="text-sm font-semibold text-slate-900">
-                Gobierno de Usuarios, Informes y Permisos
+                Gobierno de Usuarios, Módulos y Permisos
               </p>
             </div>
           </div>

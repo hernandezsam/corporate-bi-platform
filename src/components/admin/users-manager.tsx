@@ -13,7 +13,11 @@ import {
   Settings2,
   Trash2,
 } from "lucide-react";
-import type { ProfileWithAssignments, Report, UserRole } from "@/types/database";
+import type { ProfileWithAssignments, UserRole } from "@/types/database";
+import {
+  MODULE_TYPE_LABELS,
+  type CorporateModule,
+} from "@/types/modules";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,13 +56,13 @@ import {
 
 interface UsersManagerProps {
   initialUsers: ProfileWithAssignments[];
-  reports: Report[];
+  modules: CorporateModule[];
   currentAdminId: string;
 }
 
 export function UsersManager({
   initialUsers,
-  reports,
+  modules,
   currentAdminId,
 }: UsersManagerProps) {
   const router = useRouter();
@@ -81,7 +85,7 @@ export function UsersManager({
     password: "",
     role: "USER" as UserRole,
     active: true,
-    report_ids: [] as string[],
+    module_ids: [] as string[],
   });
 
   // Modal Edición Rápida
@@ -116,12 +120,12 @@ export function UsersManager({
     });
   }, [users, search, roleFilter, statusFilter]);
 
-  function toggleCreateReport(reportId: string, checked: boolean) {
+  function toggleCreateModule(moduleId: string, checked: boolean) {
     setCreateForm((prev) => ({
       ...prev,
-      report_ids: checked
-        ? [...prev.report_ids, reportId]
-        : prev.report_ids.filter((id) => id !== reportId),
+      module_ids: checked
+        ? [...prev.module_ids, moduleId]
+        : prev.module_ids.filter((id) => id !== moduleId),
     }));
   }
 
@@ -152,7 +156,7 @@ export function UsersManager({
         password: "",
         role: "USER",
         active: true,
-        report_ids: [],
+        module_ids: [],
       });
       setFeedback({
         type: "success",
@@ -368,7 +372,7 @@ export function UsersManager({
                 <TableHead>Usuario</TableHead>
                 <TableHead>Rol</TableHead>
                 <TableHead>Estado</TableHead>
-                <TableHead>Informes</TableHead>
+                <TableHead>Módulos</TableHead>
                 <TableHead>Creado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
@@ -430,8 +434,8 @@ export function UsersManager({
                         >
                           {user.assigned_reports_count}{" "}
                           {user.assigned_reports_count === 1
-                            ? "informe"
-                            : "informes"}
+                            ? "módulo"
+                            : "módulos"}
                         </Link>
                       </TableCell>
                       <TableCell className="text-xs text-slate-500">
@@ -544,7 +548,7 @@ export function UsersManager({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="USER">USER (Solo informes asignados)</SelectItem>
+                    <SelectItem value="USER">USER (Solo módulos asignados)</SelectItem>
                     <SelectItem value="ADMIN">ADMIN (Acceso administrativo total)</SelectItem>
                   </SelectContent>
                 </Select>
@@ -566,28 +570,28 @@ export function UsersManager({
               />
             </div>
 
-            {reports.length > 0 && (
+            {modules.length > 0 && (
               <div className="space-y-2">
-                <Label>Asignar informes iniciales (opcional)</Label>
+                <Label>Asignar módulos iniciales (opcional)</Label>
                 <div className="max-h-44 space-y-2 overflow-y-auto rounded-lg border border-slate-200 p-3">
-                  {reports.map((report) => {
-                    const checked = createForm.report_ids.includes(report.id);
+                  {modules.map((mod) => {
+                    const checked = createForm.module_ids.includes(mod.id);
                     return (
                       <label
-                        key={report.id}
+                        key={mod.id}
                         className="flex cursor-pointer items-center gap-2.5 text-sm"
                       >
                         <Checkbox
                           checked={checked}
                           onCheckedChange={(val) =>
-                            toggleCreateReport(report.id, Boolean(val))
+                            toggleCreateModule(mod.id, Boolean(val))
                           }
                         />
                         <span className="flex-1 truncate text-slate-800">
-                          {report.name}
+                          {mod.name}
                         </span>
-                        <span className="text-xs text-slate-400">
-                          {report.category}
+                        <span className="text-[11px] text-slate-400">
+                          {MODULE_TYPE_LABELS[mod.module_type]} · {mod.category}
                         </span>
                       </label>
                     );
